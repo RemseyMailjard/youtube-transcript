@@ -214,7 +214,7 @@ def _do_playlist() -> None:
 # ---------------------------------------------------------------------------
 # Navigation tabs
 # ---------------------------------------------------------------------------
-tabs = st.tabs(["Transcript", "Search", "Channel", "Playlist"])
+tabs = st.tabs(["Transcript", "Search", "Channel", "Playlist", "API Docs"])
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -528,6 +528,152 @@ with tabs[3]:
         info = pl_data.get("playlist_info", {})
         render_success(f"{info.get('title', 'Playlist')} — {info.get('numVideos', len(results))} videos")
         render_video_list(results)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TAB 5: API DOCS
+# ═══════════════════════════════════════════════════════════════════════════
+with tabs[4]:
+    st.markdown("##### REST API Documentation")
+    st.markdown("Base URL: `https://youtube-transcript-remsey.streamlit.app/api/v2`")
+    st.code('uv run uvicorn api:app --port 8000', language="bash")
+
+    st.divider()
+
+    # ── Endpoints table ──
+    st.markdown("##### Endpoints")
+    st.markdown("""
+| Endpoint | Description | Method |
+|----------|-------------|--------|
+| `/api/v2/youtube/transcript` | Extract video transcript | GET |
+| `/api/v2/youtube/search` | Search videos or channels | GET |
+| `/api/v2/youtube/channel/resolve` | Resolve @handle to channel ID | GET |
+| `/api/v2/youtube/channel/search` | Search within a channel | GET |
+| `/api/v2/youtube/channel/videos` | List channel uploads | GET |
+| `/api/v2/youtube/channel/latest` | Latest 15 videos (RSS) | GET |
+| `/api/v2/youtube/playlist/videos` | List playlist videos | GET |
+""")
+
+    st.divider()
+
+    # ── Transcript ──
+    st.markdown("##### Transcript")
+    st.code("GET /api/v2/youtube/transcript", language=None)
+    st.markdown("""
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `video_url` | string | Yes | — | YouTube URL or video ID |
+| `format` | string | No | `json` | `json` or `text` |
+| `include_timestamp` | bool | No | `true` | Include timestamps |
+| `send_metadata` | bool | No | `false` | Include video metadata |
+""")
+    with st.expander("Example response"):
+        st.code("""{
+  "video_id": "dQw4w9WgXcQ",
+  "language": "en",
+  "transcript": [
+    { "text": "Never gonna give you up", "start": 0.0, "duration": 4.12 },
+    { "text": "Never gonna let you down", "start": 4.12, "duration": 3.85 }
+  ]
+}""", language="json")
+
+    st.divider()
+
+    # ── Search ──
+    st.markdown("##### Search")
+    st.code("GET /api/v2/youtube/search", language=None)
+    st.markdown("""
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `q` | string | Yes | — | Search query (1-200 chars) |
+| `type` | string | No | `video` | `video` or `channel` |
+""")
+
+    st.divider()
+
+    # ── Channel ──
+    st.markdown("##### Channel Endpoints")
+    st.markdown("""
+**Resolve** — `GET /api/v2/youtube/channel/resolve?input=@TED`
+
+**Search** — `GET /api/v2/youtube/channel/search?channel=@TED&q=innovation`
+
+**Videos** — `GET /api/v2/youtube/channel/videos?channel=@TED`
+
+**Latest (RSS)** — `GET /api/v2/youtube/channel/latest?channel=@TED`
+
+All accept `@handle`, channel URL, or `UC…` ID.
+""")
+
+    st.divider()
+
+    # ── Playlist ──
+    st.markdown("##### Playlist")
+    st.code("GET /api/v2/youtube/playlist/videos?playlist=PLrAXtmErZgOe...", language=None)
+    st.markdown("Accepts playlist URL or ID (PL…, UU…, LL…).")
+
+    st.divider()
+
+    # ── Code examples ──
+    st.markdown("##### Code Examples")
+    ex_py, ex_js, ex_curl = st.tabs(["Python", "JavaScript", "cURL"])
+
+    with ex_py:
+        st.code("""import requests
+
+BASE = "https://youtube-transcript-remsey.streamlit.app/api/v2"
+
+# Get transcript
+resp = requests.get(f"{BASE}/youtube/transcript", params={
+    "video_url": "dQw4w9WgXcQ",
+    "format": "json",
+    "include_timestamp": True,
+})
+for segment in resp.json()["transcript"]:
+    print(f"[{segment['start']}s] {segment['text']}")
+
+# Search
+resp = requests.get(f"{BASE}/youtube/search", params={"q": "python", "type": "video"})
+for v in resp.json()["results"]:
+    print(f"{v['title']} ({v['videoId']})")
+""", language="python")
+
+    with ex_js:
+        st.code("""const BASE = "https://youtube-transcript-remsey.streamlit.app/api/v2";
+
+const resp = await fetch(`${BASE}/youtube/transcript?video_url=dQw4w9WgXcQ`);
+const data = await resp.json();
+data.transcript.forEach(s => console.log(`[${s.start}s] ${s.text}`));
+""", language="javascript")
+
+    with ex_curl:
+        st.code("""# Transcript
+curl "https://youtube-transcript-remsey.streamlit.app/api/v2/youtube/transcript?video_url=dQw4w9WgXcQ"
+
+# Search
+curl "https://youtube-transcript-remsey.streamlit.app/api/v2/youtube/search?q=python&type=video"
+
+# Channel latest
+curl "https://youtube-transcript-remsey.streamlit.app/api/v2/youtube/channel/latest?channel=@TED"
+""", language="bash")
+
+    st.divider()
+
+    # ── Error handling ──
+    st.markdown("##### Error Handling")
+    st.markdown("""
+| Status | Code | Description |
+|--------|------|-------------|
+| `200` | — | Success |
+| `400` | `INVALID_INPUT` | Bad request |
+| `404` | `VIDEO_NOT_FOUND` | Video not found |
+| `404` | `NO_TRANSCRIPT` | No transcript available |
+| `408` | `REQUEST_BLOCKED` | Blocked by YouTube |
+| `422` | `INVALID_URL` | Invalid URL format |
+| `500` | `INTERNAL_ERROR` | Server error |
+""")
+
+    st.info("Interactive Swagger UI available at [localhost:8000/docs](https://youtube-transcript-remsey.streamlit.app/docs) when the API server is running.")
 
 
 # ---------------------------------------------------------------------------

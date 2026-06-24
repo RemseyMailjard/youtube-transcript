@@ -1,2 +1,0 @@
-[     261ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8501/API_Docs/_stcore/health:0
-[     262ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8501/API_Docs/_stcore/host-config:0
