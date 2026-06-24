@@ -100,6 +100,17 @@ def _fetch_transcript() -> None:
     if not url:
         st.session_state["transcript_error"] = "Please enter a YouTube URL or video ID."
         return
+    _do_fetch_for_url(url)
+
+
+def _fetch_from_search(video_id: str) -> None:
+    st.session_state["transcript_url"] = video_id
+    _do_fetch_for_url(video_id)
+
+
+def _do_fetch_for_url(url: str) -> None:
+    st.session_state["transcript_result"] = None
+    st.session_state["transcript_error"] = None
     langs = st.session_state.get("lang_selection", DEFAULT_LANGUAGES)
     try:
         result = get_transcript(url, langs or DEFAULT_LANGUAGES)
@@ -326,7 +337,32 @@ with tabs[1]:
 
         stype = st.session_state.get("search_type", "video")
         if stype == "video":
-            render_video_list(results)
+            for i, v in enumerate(results):
+                video_id = v.get("videoId", "")
+                title = v.get("title", "Untitled")
+                channel = v.get("channelTitle", "")
+                length = v.get("lengthText", "")
+                views = v.get("viewCountText", "")
+                thumb = f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg" if video_id else ""
+                meta = " · ".join(p for p in [channel, length, views] if p)
+
+                col_thumb, col_info, col_action = st.columns([1.5, 3, 1])
+                with col_thumb:
+                    if thumb:
+                        st.image(thumb, use_container_width=True)
+                with col_info:
+                    st.markdown(f"**{html.escape(title)}**", unsafe_allow_html=True)
+                    st.caption(meta)
+                with col_action:
+                    st.button(
+                        "Get Transcript",
+                        key=f"sr_{i}",
+                        type="primary",
+                        use_container_width=True,
+                        on_click=_fetch_from_search,
+                        args=(video_id,),
+                    )
+                st.divider()
         else:
             for ch in results:
                 st.markdown(
@@ -342,6 +378,54 @@ with tabs[1]:
                     """,
                     unsafe_allow_html=True,
                 )
+
+    # Show transcript result fetched from search
+    if st.session_state["transcript_error"]:
+        render_error(st.session_state["transcript_error"])
+
+    search_result: TranscriptResult | None = st.session_state["transcript_result"]
+    if search_result is not None:
+        st.divider()
+        render_success(f"Transcript fetched — {search_result.video_id} — {search_result.language} ({search_result.language_code.upper()})")
+        render_transcript_stats(search_result)
+
+        s_cleaned = clean_transcript(
+            search_result.snippets,
+            include_timestamps=st.session_state.get("include_ts", False),
+            merge_paragraphs=st.session_state.get("merge_para", False),
+        )
+
+        render_copy_button(s_cleaned, key="search_transcript")
+        render_transcript_block(s_cleaned)
+
+        sd1, sd2, sd3 = st.columns(3)
+        with sd1:
+            st.download_button(
+                "Download .txt",
+                data=to_txt(search_result, body=s_cleaned),
+                file_name=build_filename(search_result.video_id, search_result.fetched_at, "txt"),
+                mime="text/plain",
+                use_container_width=True,
+                key="s_dl_txt",
+            )
+        with sd2:
+            st.download_button(
+                "Download .md",
+                data=to_markdown(search_result, body=s_cleaned),
+                file_name=build_filename(search_result.video_id, search_result.fetched_at, "md"),
+                mime="text/markdown",
+                use_container_width=True,
+                key="s_dl_md",
+            )
+        with sd3:
+            st.download_button(
+                "Download .json",
+                data=to_json(search_result),
+                file_name=build_filename(search_result.video_id, search_result.fetched_at, "json"),
+                mime="application/json",
+                use_container_width=True,
+                key="s_dl_json",
+            )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
