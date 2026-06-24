@@ -228,32 +228,84 @@ def render_history_sidebar(history: list[dict]) -> None:
 
 
 def render_footer() -> None:
-    st.markdown(
+    components.html(
         """
-        <div class="tb-footer">
-            <div style="margin-bottom:.3rem;">
-                <strong style="color:#0f172a;font-size:.95rem;">TranscriptBuddy</strong>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+            .footer {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                text-align: center;
+                color: #94a3b8;
+                font-size: 13px;
+                padding: 24px 16px 12px;
+                border-top: 1px solid #e2e8f0;
+                background: linear-gradient(180deg, transparent 0%, #f8fafc 100%);
+            }
+            .footer .app-name {
+                color: #0f172a;
+                font-size: 15px;
+                font-weight: 700;
+                margin-bottom: 4px;
+            }
+            .footer .tagline {
+                color: #64748b;
+                margin-bottom: 2px;
+            }
+            .footer .note {
+                font-size: 12px;
+                color: #94a3b8;
+                margin-top: 4px;
+            }
+            .footer .brand {
+                margin-top: 14px;
+                padding-top: 12px;
+                border-top: 1px solid #f1f5f9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                font-size: 13px;
+                color: #475569;
+            }
+            .footer .brand .name {
+                font-weight: 700;
+                color: #0f172a;
+            }
+            .footer .linkedin {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                background: #0A66C2;
+                color: #fff;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 4px 10px;
+                border-radius: 999px;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                box-shadow: 0 1px 4px rgba(10,102,194,.25);
+                margin-left: 4px;
+            }
+            .footer .linkedin:hover {
+                background: #004182;
+                box-shadow: 0 2px 8px rgba(10,102,194,.35);
+                transform: translateY(-1px);
+            }
+        </style>
+        <div class="footer">
+            <div class="app-name">TranscriptBuddy</div>
+            <div class="tagline">Turn YouTube videos into clean, usable transcripts</div>
+            <div>Built with Streamlit &amp; youtube-transcript-api &middot; Free &amp; open source</div>
+            <div class="note">Transcript availability depends on YouTube captions provided by video creators.</div>
+            <div class="brand">
+                Built by <span class="name">Remsey Mailjard</span>
+                <a href="https://www.linkedin.com/in/remseymailjard/" target="_blank" rel="noopener" class="linkedin">
+                    in &nbsp;LinkedIn
+                </a>
             </div>
-            Turn YouTube videos into clean, usable transcripts<br>
-            Built with Streamlit &amp; youtube-transcript-api · Free &amp; open source<br>
-            <span style="font-size:.76rem;color:#94a3b8;">
-                Transcript availability depends on YouTube captions provided by video creators.
-            </span>
         </div>
         """,
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="tb-footer-brand">
-            <span>Built by</span>
-            <span class="author-name">Remsey Mailjard</span>
-            <a href="https://www.linkedin.com/in/remseymailjard/" target="_blank" rel="noopener" class="tb-linkedin-btn">
-                🔗 LinkedIn
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True,
+        height=160,
     )
 
 
