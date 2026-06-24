@@ -330,6 +330,45 @@ with tabs[1]:
     if st.session_state["search_error"]:
         render_error(st.session_state["search_error"])
 
+    # Show transcript result fetched from search (above search results)
+    search_tr: TranscriptResult | None = st.session_state["transcript_result"]
+    if search_tr is not None:
+        render_success(f"Transcript — {search_tr.video_id} — {search_tr.language} ({search_tr.language_code.upper()})")
+        render_transcript_stats(search_tr)
+
+        s_cleaned = clean_transcript(
+            search_tr.snippets,
+            include_timestamps=st.session_state.get("include_ts", False),
+            merge_paragraphs=st.session_state.get("merge_para", False),
+        )
+
+        render_copy_button(s_cleaned, key="search_transcript")
+        render_transcript_block(s_cleaned)
+
+        sd1, sd2, sd3 = st.columns(3)
+        with sd1:
+            st.download_button(
+                "Download .txt",
+                data=to_txt(search_tr, body=s_cleaned),
+                file_name=build_filename(search_tr.video_id, search_tr.fetched_at, "txt"),
+                mime="text/plain", use_container_width=True, key="s_dl_txt",
+            )
+        with sd2:
+            st.download_button(
+                "Download .md",
+                data=to_markdown(search_tr, body=s_cleaned),
+                file_name=build_filename(search_tr.video_id, search_tr.fetched_at, "md"),
+                mime="text/markdown", use_container_width=True, key="s_dl_md",
+            )
+        with sd3:
+            st.download_button(
+                "Download .json",
+                data=to_json(search_tr),
+                file_name=build_filename(search_tr.video_id, search_tr.fetched_at, "json"),
+                mime="application/json", use_container_width=True, key="s_dl_json",
+            )
+        st.divider()
+
     search_data = st.session_state["search_results"]
     if search_data:
         results = search_data.get("results", [])
@@ -379,53 +418,6 @@ with tabs[1]:
                     unsafe_allow_html=True,
                 )
 
-    # Show transcript result fetched from search
-    if st.session_state["transcript_error"]:
-        render_error(st.session_state["transcript_error"])
-
-    search_result: TranscriptResult | None = st.session_state["transcript_result"]
-    if search_result is not None:
-        st.divider()
-        render_success(f"Transcript fetched — {search_result.video_id} — {search_result.language} ({search_result.language_code.upper()})")
-        render_transcript_stats(search_result)
-
-        s_cleaned = clean_transcript(
-            search_result.snippets,
-            include_timestamps=st.session_state.get("include_ts", False),
-            merge_paragraphs=st.session_state.get("merge_para", False),
-        )
-
-        render_copy_button(s_cleaned, key="search_transcript")
-        render_transcript_block(s_cleaned)
-
-        sd1, sd2, sd3 = st.columns(3)
-        with sd1:
-            st.download_button(
-                "Download .txt",
-                data=to_txt(search_result, body=s_cleaned),
-                file_name=build_filename(search_result.video_id, search_result.fetched_at, "txt"),
-                mime="text/plain",
-                use_container_width=True,
-                key="s_dl_txt",
-            )
-        with sd2:
-            st.download_button(
-                "Download .md",
-                data=to_markdown(search_result, body=s_cleaned),
-                file_name=build_filename(search_result.video_id, search_result.fetched_at, "md"),
-                mime="text/markdown",
-                use_container_width=True,
-                key="s_dl_md",
-            )
-        with sd3:
-            st.download_button(
-                "Download .json",
-                data=to_json(search_result),
-                file_name=build_filename(search_result.video_id, search_result.fetched_at, "json"),
-                mime="application/json",
-                use_container_width=True,
-                key="s_dl_json",
-            )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
