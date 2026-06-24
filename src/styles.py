@@ -433,18 +433,62 @@ html, body, [class*="css"] {
 .tb-footer {
     text-align: center;
     color: var(--tb-muted);
-    font-size: .78rem;
-    margin-top: 3rem;
-    padding: 1.5rem 0 .5rem;
-    border-top: 1px solid var(--tb-border-light);
+    font-size: .82rem;
+    margin-top: 3.5rem;
+    padding: 2rem 1.5rem 1.2rem;
+    border-top: 1px solid var(--tb-border);
+    background: linear-gradient(180deg, transparent 0%, var(--tb-bg-subtle) 100%);
 }
 .tb-footer a {
     color: var(--tb-primary);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+    transition: color 0.15s ease;
 }
 .tb-footer a:hover {
+    color: var(--tb-primary-dark);
     text-decoration: underline;
+}
+.tb-footer-brand {
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--tb-border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    font-size: .85rem;
+    color: var(--tb-text-secondary);
+}
+.tb-footer-brand .author-name {
+    font-weight: 700;
+    color: var(--tb-text);
+}
+.tb-linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    background: #0A66C2;
+    color: #fff !important;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 4px rgba(10,102,194,.25);
+}
+.tb-linkedin-btn:hover {
+    background: #004182;
+    box-shadow: 0 2px 8px rgba(10,102,194,.35);
+    transform: translateY(-1px);
+    color: #fff !important;
+    text-decoration: none !important;
+}
+.tb-linkedin-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: #fff;
 }
 
 /* === Streamlit widget polish =========================================== */
