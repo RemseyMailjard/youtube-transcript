@@ -16,9 +16,9 @@ from .models import TranscriptResult
 def render_hero() -> None:
     st.markdown(
         """
-        <div class="tb-hero">
-            <h1>YouTube to Transcript</h1>
-            <p>Generate YouTube Transcript for FREE.<br>
+        <div style="background:linear-gradient(135deg,#FF0000 0%,#CC0000 100%);padding:2.5rem 2rem 2rem;text-align:center;margin:-1rem -1rem 2rem -1rem;border-radius:0;">
+            <h1 style="color:#FFFFFF;font-size:2.8rem;font-weight:900;margin:0 0 0.5rem 0;letter-spacing:-0.03em;">YouTube to Transcript</h1>
+            <p style="color:rgba(255,255,255,0.9);font-size:1rem;margin:0;line-height:1.5;">Generate YouTube Transcript for FREE.<br>
             Access all Transcript Languages, Easy Copy and Edit!</p>
         </div>
         """,

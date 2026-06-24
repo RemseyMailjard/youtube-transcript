@@ -57,7 +57,7 @@ html, body, [class*="css"] {
     letter-spacing: -0.03em;
 }
 .tb-hero p {
-    color: rgba(255,255,255,0.9);
+    color: rgba(255,255,255,0.9) !important;
     font-size: 1rem;
     margin: 0;
     line-height: 1.5;
