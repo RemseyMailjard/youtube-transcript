@@ -9,9 +9,9 @@ _CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --tb-yellow: #FCBF17;
-    --tb-yellow-dark: #E5A800;
-    --tb-dark: #2D2D2D;
+    --tb-yellow: #FF0000;
+    --tb-yellow-dark: #CC0000;
+    --tb-dark: #FFFFFF;
     --tb-text: #333333;
     --tb-text-light: #666666;
     --tb-muted: #999999;
@@ -41,23 +41,22 @@ html, body, [class*="css"] {
 
 /* Hero banner */
 .tb-hero {
-    background: var(--tb-yellow);
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
     padding: 2.5rem 2rem 2rem;
     text-align: center;
     margin: -1rem -1rem 2rem -1rem;
 }
 .tb-hero h1 {
-    color: var(--tb-dark);
+    color: #FFFFFF;
     font-size: 2.8rem;
     font-weight: 900;
     margin: 0 0 0.5rem 0;
     letter-spacing: -0.03em;
 }
 .tb-hero p {
-    color: var(--tb-dark);
+    color: rgba(255,255,255,0.9);
     font-size: 1rem;
     margin: 0;
-    opacity: 0.85;
     line-height: 1.5;
 }
 
@@ -220,15 +219,15 @@ html, body, [class*="css"] {
 
 /* Primary button override */
 button[kind="primary"] {
-    background: var(--tb-yellow) !important;
-    color: var(--tb-dark) !important;
+    background: #FF0000 !important;
+    color: #FFFFFF !important;
     border: none !important;
     font-weight: 700 !important;
     box-shadow: none !important;
     border-radius: var(--tb-radius-sm) !important;
 }
 button[kind="primary"]:hover {
-    background: var(--tb-yellow-dark) !important;
+    background: #CC0000 !important;
     box-shadow: var(--tb-shadow) !important;
 }
 
@@ -240,8 +239,8 @@ button[kind="primary"]:hover {
     font-size: 0.92rem !important;
 }
 .stTextInput input:focus {
-    border-color: var(--tb-yellow) !important;
-    box-shadow: 0 0 0 3px rgba(252,191,23,0.15) !important;
+    border-color: #FF0000 !important;
+    box-shadow: 0 0 0 3px rgba(255,0,0,0.1) !important;
 }
 
 /* Tabs */
@@ -257,8 +256,8 @@ button[kind="primary"]:hover {
     color: var(--tb-muted);
 }
 .stTabs [aria-selected="true"] {
-    color: var(--tb-dark) !important;
-    border-bottom: 2px solid var(--tb-yellow) !important;
+    color: #282828 !important;
+    border-bottom: 2px solid #FF0000 !important;
 }
 
 /* Footer */
