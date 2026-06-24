@@ -87,7 +87,18 @@ for _k, _v in _DEFAULTS.items():
 # ---------------------------------------------------------------------------
 # Hero
 # ---------------------------------------------------------------------------
-render_hero()
+import streamlit.components.v1 as _components
+_components.html(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <div style="background:linear-gradient(135deg,#FF0000 0%,#CC0000 100%);padding:2.5rem 2rem 2rem;text-align:center;font-family:Inter,sans-serif;">
+        <div style="color:#FFFFFF;font-size:2.8rem;font-weight:900;margin:0 0 0.5rem 0;letter-spacing:-0.03em;">YouTube to Transcript</div>
+        <div style="color:rgba(255,255,255,0.9);font-size:1.05rem;line-height:1.6;">Generate YouTube Transcript for FREE.<br>
+        Access all Transcript Languages, Easy Copy and Edit!</div>
+    </div>
+    """,
+    height=190,
+)
 
 
 # ---------------------------------------------------------------------------
