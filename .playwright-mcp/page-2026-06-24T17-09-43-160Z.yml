@@ -1,0 +1,48 @@
+- generic [ref=e3]:
+  - banner [ref=e6]
+  - generic [ref=e7]:
+    - generic [ref=e12]:
+      - heading "YouTube to Transcript" [level=1] [ref=e14]:
+        - text: YouTube to Transcript
+        - generic [ref=e15]:
+          - link "Link to heading":
+            - /url: "#you-tube-to-transcript"
+            - img
+      - paragraph [ref=e16]:
+        - text: Generate YouTube Transcript for FREE.
+        - text: Access all Transcript Languages, Easy Copy and Edit!
+    - generic [ref=e18]:
+      - tablist [ref=e20]:
+        - tab "Transcript" [selected] [ref=e21] [cursor=pointer]:
+          - paragraph [ref=e23]: Transcript
+        - tab "Search" [ref=e24] [cursor=pointer]:
+          - paragraph [ref=e26]: Search
+        - tab "Channel" [ref=e27] [cursor=pointer]:
+          - paragraph [ref=e29]: Channel
+        - tab "Playlist" [ref=e30] [cursor=pointer]:
+          - paragraph [ref=e32]: Playlist
+        - tab "API Docs" [ref=e33] [cursor=pointer]:
+          - paragraph [ref=e35]: API Docs
+      - tabpanel "Transcript" [ref=e38]:
+        - generic [ref=e39]:
+          - heading "Get Transcript" [level=5] [ref=e45]:
+            - text: Get Transcript
+            - generic [ref=e46]:
+              - link "Link to heading":
+                - /url: "#get-transcript"
+                - img
+          - generic [ref=e48]:
+            - textbox "YouTube URL" [ref=e55]:
+              - /placeholder: Paste YouTube URL here...
+            - button "Get Transcript" [ref=e60] [cursor=pointer]:
+              - paragraph [ref=e64]: Get Transcript
+          - group [ref=e67]:
+            - generic "keyboard_arrow_right Language & format options" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]:
+                - generic [ref=e71]: keyboard_arrow_right
+                - paragraph [ref=e74]: Language & format options
+    - paragraph [ref=e80]:
+      - text: Built by
+      - link "Remsey Mailjard" [ref=e81] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/remseymailjard/
+      - text: · Powered by youtube-transcript-api & yt-dlp
