@@ -29,6 +29,9 @@ _CSS = """
 
 html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 [data-testid="stAppViewContainer"] > .main .block-container {
@@ -128,8 +131,8 @@ html, body, [class*="css"] {
     border: 1px solid var(--tb-border);
     border-radius: var(--tb-radius-sm);
     padding: 1.5rem;
-    line-height: 1.8;
-    font-size: 0.92rem;
+    line-height: 1.9;
+    font-size: 1rem;
     color: var(--tb-text);
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -155,7 +158,7 @@ html, body, [class*="css"] {
     gap: 0.1rem;
 }
 .tb-stat .label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--tb-muted);
