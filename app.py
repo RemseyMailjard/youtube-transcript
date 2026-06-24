@@ -1,26 +1,19 @@
-"""TranscriptBuddy - Streamlit app.
+"""TranscriptBuddy — Premium Streamlit app.
 
-Lokaal starten:
+Start locally:
     uv run streamlit run app.py
-
-De zware logica leeft in `src/`, deze module bevat enkel UI + glue.
 """
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import pandas as pd
 import streamlit as st
 
-from src.export_service import (
-    build_filename,
-    save_transcript,
-    to_json,
-    to_markdown,
-    to_txt,
-)
+from src.export_service import build_filename, save_transcript, to_json, to_markdown, to_txt
 from src.models import TranscriptResult
+from src.styles import inject_css
 from src.transcript_service import (
     CouldNotRetrieveTranscript,
     DEFAULT_LANGUAGES,
@@ -28,24 +21,73 @@ from src.transcript_service import (
     SUPPORTED_LANGUAGES,
     TranscriptsDisabled,
     VideoUnavailable,
+    clean_transcript,
     get_transcript,
+)
+from src.ui_components import (
+    fmt_hms,
+    render_copy_button,
+    render_error,
+    render_footer,
+    render_hero,
+    render_history_sidebar,
+    render_how_it_works,
+    render_stat_cards,
+    render_success_bar,
+    render_transcript_block,
 )
 from src.youtube_utils import build_watch_url
 
 try:
-    from src.transcript_service import IpBlocked, RequestBlocked  # type: ignore
+    from src.transcript_service import IpBlocked, RequestBlocked  # type: ignore[attr-defined]
+
     _BLOCK_EXCS: tuple[type[BaseException], ...] = (RequestBlocked, IpBlocked)
-except ImportError:  # pragma: no cover
+except ImportError:
     _BLOCK_EXCS = ()
 
 
 APP_NAME = "TranscriptBuddy"
-APP_TAGLINE = "Turn YouTube videos into clean transcripts"
+APP_TAGLINE = "Turn YouTube videos into clean, usable transcripts"
 EXAMPLE_URL = "https://www.youtube.com/watch?v=9-zxCfKKxyU"
+
+_ERROR_MESSAGES: dict[str, tuple[str, str | None]] = {
+    "empty_input": (
+        "Please enter a YouTube URL or video ID.",
+        None,
+    ),
+    "no_languages": (
+        "Please select at least one preferred language.",
+        None,
+    ),
+    "invalid": (
+        "Invalid input — we couldn't extract a video ID.",
+        "Make sure you're using a valid YouTube URL or an 11-character video ID.",
+    ),
+    "unavailable": (
+        "This video is unavailable.",
+        "It may be private, deleted, or restricted in your region.",
+    ),
+    "disabled": (
+        "Transcripts are disabled for this video.",
+        "The video owner has turned off captions. Try a different video.",
+    ),
+    "not_found": (
+        "No transcript found for your selected languages.",
+        "Try adding more languages in the sidebar, or the video may not have captions.",
+    ),
+    "blocked": (
+        "YouTube is blocking this request.",
+        "This often happens on cloud-hosted servers. Try running locally or wait a few minutes.",
+    ),
+    "generic": (
+        "Something went wrong while fetching the transcript.",
+        None,
+    ),
+}
 
 
 # ---------------------------------------------------------------------------
-# Page config + styling
+# Page config
 # ---------------------------------------------------------------------------
 st.set_page_config(
     page_title=APP_NAME,
@@ -53,27 +95,34 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+inject_css()
 
 
 # ---------------------------------------------------------------------------
-# Session state helpers
+# Session state
 # ---------------------------------------------------------------------------
 def _init_state() -> None:
-    defaults = {
+    defaults: dict = {
         "video_input": "",
-        "result": None,         # TranscriptResult | None
-        "error": None,          # str | None
-        "cache_bust": 0,        # int, gebruikt om st.cache_data te omzeilen
+        "result": None,
+        "error_key": None,
+        "error_detail": None,
+        "cache_bust": 0,
         "auto_save": False,
         "saved_path": None,
+        "history": [],
+        "include_timestamps": False,
+        "merge_paragraphs": False,
+        "remove_extra_spaces": True,
+        "lowercase": False,
+        "remove_filler_words": False,
     }
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
 
 
 def _reset_app() -> None:
-    """Reset alle invoer en resultaten."""
-    for key in ("video_input", "result", "error", "saved_path"):
+    for key in ("video_input", "result", "error_key", "error_detail", "saved_path"):
         st.session_state[key] = None if key != "video_input" else ""
     st.session_state["cache_bust"] += 1
 
@@ -83,7 +132,7 @@ def _load_example() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Cached fetch (busted via session counter)
+# Cached fetch
 # ---------------------------------------------------------------------------
 @st.cache_data(show_spinner=False)
 def _cached_get_transcript(
@@ -95,156 +144,206 @@ def _cached_get_transcript(
 
 
 def _run_fetch(video_input: str, languages: list[str]) -> None:
-    """Roep de service-laag aan, vang exceptions in een nette string."""
     st.session_state["result"] = None
-    st.session_state["error"] = None
+    st.session_state["error_key"] = None
+    st.session_state["error_detail"] = None
     st.session_state["saved_path"] = None
 
     if not video_input.strip():
-        st.session_state["error"] = "Voer eerst een YouTube URL of video-ID in."
+        st.session_state["error_key"] = "empty_input"
         return
     if not languages:
-        st.session_state["error"] = "Kies minstens één voorkeurstaal."
+        st.session_state["error_key"] = "no_languages"
         return
 
     try:
-        with st.spinner("Transcript ophalen..."):
+        with st.spinner("Fetching transcript..."):
             result = _cached_get_transcript(
                 video_input.strip(),
                 tuple(languages),
                 st.session_state["cache_bust"],
             )
     except ValueError as e:
-        st.session_state["error"] = f"Ongeldige invoer: {e}"
+        st.session_state["error_key"] = "invalid"
+        st.session_state["error_detail"] = str(e)
     except VideoUnavailable as e:
-        st.session_state["error"] = f"Video niet beschikbaar: {e}"
+        st.session_state["error_key"] = "unavailable"
+        st.session_state["error_detail"] = str(e)
     except TranscriptsDisabled:
-        st.session_state["error"] = (
-            "Voor deze video staan transcripties uitgeschakeld door de uploader."
-        )
+        st.session_state["error_key"] = "disabled"
     except NoTranscriptFound:
-        st.session_state["error"] = (
-            f"Geen transcript gevonden voor talen {languages}. "
-            "Probeer een andere taalvolgorde."
-        )
+        st.session_state["error_key"] = "not_found"
+        st.session_state["error_detail"] = f"Tried: {', '.join(languages)}"
     except _BLOCK_EXCS as e:  # type: ignore[misc]
-        st.session_state["error"] = (
-            f"YouTube blokkeert dit verzoek ({type(e).__name__}). "
-            "Dit gebeurt vaak vanaf cloud-IP's. Probeer het later opnieuw "
-            "of stel een (residential) proxy in."
-        )
+        st.session_state["error_key"] = "blocked"
+        st.session_state["error_detail"] = type(e).__name__
     except CouldNotRetrieveTranscript as e:
-        st.session_state["error"] = f"{type(e).__name__}: {e}"
-    except Exception as e:  # pragma: no cover
-        st.session_state["error"] = f"Onverwachte fout: {type(e).__name__}: {e}"
+        st.session_state["error_key"] = "generic"
+        st.session_state["error_detail"] = f"{type(e).__name__}: {e}"
+    except Exception as e:
+        st.session_state["error_key"] = "generic"
+        st.session_state["error_detail"] = f"{type(e).__name__}: {e}"
     else:
         st.session_state["result"] = result
+        _add_to_history(result)
         if st.session_state["auto_save"]:
             st.session_state["saved_path"] = str(save_transcript(result, fmt="txt"))
 
 
+def _add_to_history(result: TranscriptResult) -> None:
+    entry = {
+        "video_id": result.video_id,
+        "language": f"{result.language} ({result.language_code})",
+        "time": result.fetched_at.strftime("%H:%M:%S"),
+    }
+    history: list[dict] = st.session_state["history"]
+    if not history or history[-1]["video_id"] != result.video_id:
+        history.append(entry)
+    if len(history) > 10:
+        history[:] = history[-10:]
+
+
 # ---------------------------------------------------------------------------
-# Render-helpers
+# Sidebar
 # ---------------------------------------------------------------------------
-def _fmt_hms(seconds: float) -> str:
-    """`123.4` -> `00:02:03`."""
-    return str(timedelta(seconds=int(seconds)))
-
-
-def _snippets_dataframe(result: TranscriptResult) -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "Start": [_fmt_hms(s.start) for s in result.snippets],
-            "Duur (s)": [round(s.duration, 2) for s in result.snippets],
-            "Tekst": [s.text for s in result.snippets],
-        }
-    )
-
-
-def _render_header() -> None:
-    st.title(f"🎬 {APP_NAME}")
-    st.caption(APP_TAGLINE)
-    st.write(
-        "Plak een YouTube-link of video-ID, kies je voorkeurstalen in de "
-        "zijbalk en haal direct een schoon transcript op. Bekijk, kopieer of "
-        "download het als `.txt`, `.md` of `.json`."
-    )
-
-
-def _render_sidebar() -> tuple[list[str], bool, bool]:
+def _render_sidebar() -> list[str]:
     with st.sidebar:
-        st.header("⚙️ Instellingen")
+        st.markdown(
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">'
+            '<span style="font-size:1.6rem;">🎬</span>'
+            '<span style="font-size:1.15rem;font-weight:700;color:#0f172a;">TranscriptBuddy</span>'
+            "</div>",
+            unsafe_allow_html=True,
+        )
+        st.caption("Settings & preferences")
+        st.divider()
 
+        # Language preferences
+        st.markdown('<p class="sidebar-section">Language preferences</p>', unsafe_allow_html=True)
         language_codes = st.multiselect(
-            "Voorkeurstalen (volgorde = prioriteit)",
+            "Preferred languages (order = priority)",
             options=list(SUPPORTED_LANGUAGES.keys()),
             default=DEFAULT_LANGUAGES,
             format_func=lambda code: f"{SUPPORTED_LANGUAGES[code]} ({code})",
-            help=(
-                "TranscriptBuddy probeert de talen in deze volgorde. "
-                "Standaard eerst Nederlands, dan Engels."
-            ),
+            help="TranscriptBuddy tries languages in this order. Not all videos have captions in every language.",
+            label_visibility="collapsed",
+        )
+        st.caption("⚡ Availability depends on YouTube captions")
+
+        st.divider()
+
+        # Transcript cleaning
+        st.markdown('<p class="sidebar-section">Transcript cleaning</p>', unsafe_allow_html=True)
+        st.session_state["include_timestamps"] = st.toggle(
+            "Include timestamps",
+            value=st.session_state["include_timestamps"],
+            help="Prepend [HH:MM:SS] to each line.",
+        )
+        st.session_state["merge_paragraphs"] = st.toggle(
+            "Merge lines into paragraphs",
+            value=st.session_state["merge_paragraphs"],
+            help="Group every 5 lines into a paragraph for easier reading.",
+        )
+        st.session_state["remove_extra_spaces"] = st.toggle(
+            "Remove extra spaces",
+            value=st.session_state["remove_extra_spaces"],
+            help="Collapse multiple spaces and trim whitespace.",
+        )
+        st.session_state["lowercase"] = st.toggle(
+            "Convert to lowercase",
+            value=st.session_state["lowercase"],
+        )
+        st.session_state["remove_filler_words"] = st.toggle(
+            "Remove filler words",
+            value=st.session_state["remove_filler_words"],
+            help="Removes common English filler words (um, uh, like, etc.). Use with caution.",
         )
 
         st.divider()
-        show_table = st.toggle(
-            "Toon tabelweergave",
-            value=True,
-            help="Laat snippets zien met starttijd en duur.",
-        )
+
+        # Export settings
+        st.markdown('<p class="sidebar-section">Export settings</p>', unsafe_allow_html=True)
         st.session_state["auto_save"] = st.toggle(
-            "Sla automatisch op in `output/`",
+            "Auto-save to output/",
             value=st.session_state["auto_save"],
-            help="Schrijft het transcript als .txt naar de output-map.",
+            help="Automatically save as .txt to the output folder after fetching.",
         )
 
         st.divider()
-        st.subheader("ℹ️ Goed om te weten")
-        st.info(
-            "Niet elke YouTube-video heeft een transcript. Sommige uploaders "
-            "schakelen ondertitels uit.",
-            icon="ℹ️",
-        )
-        st.warning(
-            "YouTube blokkeert soms verzoeken vanaf cloud- of datacenter-IP's. "
-            "Lokaal werkt meestal probleemloos.",
-            icon="⚠️",
-        )
+
+        # History
+        render_history_sidebar(st.session_state.get("history", []))
 
         st.divider()
-        st.caption(f"{APP_NAME} · v0.1 · Powered by `youtube-transcript-api`")
 
-    return language_codes, show_table, st.session_state["auto_save"]
+        # About
+        st.markdown('<p class="sidebar-section">About</p>', unsafe_allow_html=True)
+        with st.expander("How it works"):
+            st.markdown(
+                "TranscriptBuddy uses the `youtube-transcript-api` library to fetch "
+                "captions from YouTube videos. It works with auto-generated and manually "
+                "added captions in 11+ languages."
+            )
+        with st.expander("Known limitations"):
+            st.markdown(
+                "- Not all videos have captions available\n"
+                "- Some uploaders disable transcripts\n"
+                "- YouTube may block requests from cloud/datacenter IPs\n"
+                "- Auto-generated captions may contain errors\n"
+                "- Running locally provides the most reliable experience"
+            )
+        with st.expander("Theme tip"):
+            st.markdown(
+                'TranscriptBuddy looks best in **light mode**. Go to\n'
+                "*Settings → Theme → Light* in the Streamlit menu."
+            )
+
+        st.divider()
+        st.caption("TranscriptBuddy v1.0 · Powered by youtube-transcript-api")
+
+    return language_codes
 
 
+# ---------------------------------------------------------------------------
+# Input area
+# ---------------------------------------------------------------------------
 def _render_input(languages: list[str]) -> None:
-    col_input, col_example = st.columns([5, 1])
+    st.markdown(
+        '<p class="tb-section-title">Enter a YouTube video</p>'
+        '<p class="tb-section-sub">Paste any YouTube URL or video ID below</p>',
+        unsafe_allow_html=True,
+    )
+
+    col_input, col_btns = st.columns([4, 1])
     with col_input:
         st.text_input(
-            "YouTube URL of video-ID",
+            "YouTube URL or Video ID",
             key="video_input",
-            placeholder="https://www.youtube.com/watch?v=...",
+            placeholder="https://www.youtube.com/watch?v=... or paste a video ID",
+            label_visibility="collapsed",
         )
-    with col_example:
-        st.write("")  # spacer voor uitlijning
-        st.write("")
-        st.button("Voorbeeld", on_click=_load_example, use_container_width=True)
+    with col_btns:
+        st.button(
+            "Try example",
+            on_click=_load_example,
+            use_container_width=True,
+        )
 
-    col_fetch, col_refetch, col_reset = st.columns([2, 2, 1])
-    with col_fetch:
+    c1, c2, c3 = st.columns([3, 2, 1])
+    with c1:
         fetch_clicked = st.button(
-            "🎯 Haal transcript op",
+            "🎯 Get Transcript",
             type="primary",
             use_container_width=True,
         )
-    with col_refetch:
+    with c2:
         refetch_clicked = st.button(
-            "🔄 Opnieuw ophalen (cache leeg)",
+            "🔄 Refetch (clear cache)",
             use_container_width=True,
-            disabled=not st.session_state["video_input"],
+            disabled=not st.session_state.get("video_input"),
         )
-    with col_reset:
-        st.button("✖ Reset", on_click=_reset_app, use_container_width=True)
+    with c3:
+        st.button("Reset", on_click=_reset_app, use_container_width=True)
 
     if refetch_clicked:
         st.session_state["cache_bust"] += 1
@@ -253,46 +352,68 @@ def _render_input(languages: list[str]) -> None:
         _run_fetch(st.session_state["video_input"], languages)
 
 
-def _render_metadata(result: TranscriptResult) -> None:
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Video ID", result.video_id)
-    col2.metric("Taal", f"{result.language_code.upper()}")
-    col3.metric("Regels", result.line_count)
-    col4.metric("Woorden", result.word_count)
-
-    sub1, sub2, sub3 = st.columns(3)
-    sub1.markdown(f"**Taalnaam:** {result.language}")
-    sub2.markdown(
-        f"**Type:** {'Auto-generated' if result.is_generated else 'Handmatig'}"
+# ---------------------------------------------------------------------------
+# Result rendering
+# ---------------------------------------------------------------------------
+def _get_cleaned_text(result: TranscriptResult) -> str:
+    return clean_transcript(
+        result.snippets,
+        include_timestamps=st.session_state.get("include_timestamps", False),
+        merge_paragraphs=st.session_state.get("merge_paragraphs", False),
+        remove_extra_spaces=st.session_state.get("remove_extra_spaces", True),
+        lowercase=st.session_state.get("lowercase", False),
+        remove_filler_words=st.session_state.get("remove_filler_words", False),
     )
-    sub3.markdown(
-        f"**Opgehaald:** {result.fetched_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+def _get_timestamped_text(result: TranscriptResult) -> str:
+    return clean_transcript(
+        result.snippets,
+        include_timestamps=True,
+        merge_paragraphs=False,
+        remove_extra_spaces=st.session_state.get("remove_extra_spaces", True),
+        lowercase=st.session_state.get("lowercase", False),
+        remove_filler_words=st.session_state.get("remove_filler_words", False),
     )
-    st.markdown(f"[▶️ Open video op YouTube]({build_watch_url(result.video_id)})")
 
 
-def _render_downloads(result: TranscriptResult) -> None:
-    st.subheader("⬇️ Downloads")
+def _snippets_dataframe(result: TranscriptResult) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "Start": [fmt_hms(s.start) for s in result.snippets],
+            "Duration (s)": [round(s.duration, 2) for s in result.snippets],
+            "Text": [s.text for s in result.snippets],
+        }
+    )
+
+
+def _render_downloads(result: TranscriptResult, cleaned_text: str) -> None:
+    st.markdown(
+        '<p class="tb-section-title">Download transcript</p>'
+        '<p class="tb-section-sub">Export in your preferred format</p>',
+        unsafe_allow_html=True,
+    )
+
     d1, d2, d3 = st.columns(3)
     with d1:
         st.download_button(
-            "Download .txt",
-            data=to_txt(result),
+            "📄 Download .txt",
+            data=to_txt(result, body=cleaned_text),
             file_name=build_filename(result.video_id, result.fetched_at, "txt"),
             mime="text/plain",
             use_container_width=True,
         )
     with d2:
         st.download_button(
-            "Download .md",
-            data=to_markdown(result),
+            "📝 Download .md",
+            data=to_markdown(result, body=cleaned_text),
             file_name=build_filename(result.video_id, result.fetched_at, "md"),
             mime="text/markdown",
             use_container_width=True,
         )
     with d3:
         st.download_button(
-            "Download .json",
+            "🔧 Download .json",
             data=to_json(result),
             file_name=build_filename(result.video_id, result.fetched_at, "json"),
             mime="application/json",
@@ -300,35 +421,43 @@ def _render_downloads(result: TranscriptResult) -> None:
         )
 
     if st.session_state.get("saved_path"):
-        st.success(
-            f"📁 Lokaal opgeslagen: `{st.session_state['saved_path']}`",
-            icon="💾",
-        )
+        st.success(f"Auto-saved to: `{st.session_state['saved_path']}`")
 
 
-def _render_result(result: TranscriptResult, show_table: bool) -> None:
-    st.success("Transcript succesvol opgehaald.", icon="✅")
-    _render_metadata(result)
+def _render_result(result: TranscriptResult) -> None:
+    render_success_bar(result.video_id, f"{result.language} ({result.language_code.upper()})")
 
-    tabs = st.tabs(["📄 Transcript", "📊 Tabel", "🔧 Technisch"])
+    # Link to video
+    st.markdown(
+        f"[▶️ Watch on YouTube]({build_watch_url(result.video_id)})",
+    )
 
-    with tabs[0]:
-        st.text_area(
-            "Transcript (alleen-lezen)",
-            value=result.text,
-            height=500,
-            label_visibility="collapsed",
-        )
+    # Stat cards
+    render_stat_cards(result)
 
-    with tabs[1]:
-        if show_table:
-            df = _snippets_dataframe(result)
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        else:
-            st.info("Tabelweergave staat uit in de zijbalk.")
+    # Prepare texts
+    cleaned_text = _get_cleaned_text(result)
+    timestamped_text = _get_timestamped_text(result)
 
-    with tabs[2]:
-        with st.expander("Ruwe metadata"):
+    # Tabs
+    tab_clean, tab_ts, tab_table, tab_raw = st.tabs(
+        ["📄 Clean transcript", "⏱️ Timestamped", "📊 Table view", "🔧 Raw data"]
+    )
+
+    with tab_clean:
+        render_copy_button(cleaned_text, key="clean")
+        render_transcript_block(cleaned_text)
+
+    with tab_ts:
+        render_copy_button(timestamped_text, key="ts")
+        render_transcript_block(timestamped_text)
+
+    with tab_table:
+        df = _snippets_dataframe(result)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+
+    with tab_raw:
+        with st.expander("Metadata (JSON)", expanded=True):
             st.json(
                 {
                     "video_id": result.video_id,
@@ -338,19 +467,21 @@ def _render_result(result: TranscriptResult, show_table: bool) -> None:
                     "fetched_at": result.fetched_at.isoformat(timespec="seconds"),
                     "line_count": result.line_count,
                     "word_count": result.word_count,
-                    "duration_seconds": result.duration_seconds,
+                    "char_count": result.char_count,
+                    "reading_time_minutes": round(result.reading_time_minutes, 1),
+                    "duration_seconds": round(result.duration_seconds, 1),
                 }
             )
-        with st.expander("Eerste 3 snippets (JSON)"):
+        with st.expander("First 5 snippets"):
             st.json(
                 [
                     {"text": s.text, "start": s.start, "duration": s.duration}
-                    for s in result.snippets[:3]
+                    for s in result.snippets[:5]
                 ]
             )
 
     st.divider()
-    _render_downloads(result)
+    _render_downloads(result, cleaned_text)
 
 
 # ---------------------------------------------------------------------------
@@ -358,20 +489,31 @@ def _render_result(result: TranscriptResult, show_table: bool) -> None:
 # ---------------------------------------------------------------------------
 def main() -> None:
     _init_state()
-    languages, show_table, _ = _render_sidebar()
-    _render_header()
+    languages = _render_sidebar()
 
-    st.divider()
+    render_hero(APP_NAME, APP_TAGLINE)
     _render_input(languages)
 
-    if st.session_state["error"]:
-        st.error(st.session_state["error"], icon="🚫")
+    # Error display
+    error_key = st.session_state.get("error_key")
+    if error_key:
+        msg, hint = _ERROR_MESSAGES.get(error_key, _ERROR_MESSAGES["generic"])
+        detail = st.session_state.get("error_detail")
+        render_error(msg, hint)
+        if detail:
+            with st.expander("Technical details"):
+                st.code(detail, language=None)
 
+    # Result display
     if st.session_state["result"] is not None:
         st.divider()
-        _render_result(st.session_state["result"], show_table=show_table)
+        _render_result(st.session_state["result"])
+    elif not error_key:
+        st.divider()
+        render_how_it_works()
+
+    render_footer()
 
 
 if __name__ == "__main__":
     main()
-

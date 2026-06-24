@@ -49,6 +49,14 @@ class TranscriptResult:
         return sum(len(s.text.split()) for s in self.snippets)
 
     @property
+    def char_count(self) -> int:
+        return sum(len(s.text) for s in self.snippets)
+
+    @property
+    def reading_time_minutes(self) -> float:
+        return self.word_count / 200
+
+    @property
     def duration_seconds(self) -> float:
         if not self.snippets:
             return 0.0

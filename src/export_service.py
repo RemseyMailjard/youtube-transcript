@@ -39,11 +39,11 @@ def to_txt(result: TranscriptResult, body: str | None = None) -> str:
     header = (
         "=== Transcript metadata ===\n"
         f"Video ID       : {result.video_id}\n"
-        f"Taal           : {result.language} ({result.language_code})\n"
+        f"Language       : {result.language} ({result.language_code})\n"
         f"Auto-generated : {result.is_generated}\n"
-        f"Opgehaald op   : {result.fetched_at.isoformat(timespec='seconds')}\n"
-        f"Aantal regels  : {result.line_count}\n"
-        f"Aantal woorden : {result.word_count}\n"
+        f"Fetched at     : {result.fetched_at.isoformat(timespec='seconds')}\n"
+        f"Lines          : {result.line_count}\n"
+        f"Words          : {result.word_count}\n"
         "===========================\n\n"
     )
     return header + (body if body is not None else result.text)
@@ -52,16 +52,16 @@ def to_txt(result: TranscriptResult, body: str | None = None) -> str:
 def to_markdown(result: TranscriptResult, body: str | None = None) -> str:
     """Markdown export met metadata-tabel. `body` is optioneel override."""
     lines = [
-        f"# Transcript - {result.video_id}",
+        f"# Transcript — {result.video_id}",
         "",
-        "| Veld | Waarde |",
+        "| Field | Value |",
         "| --- | --- |",
         f"| Video ID | `{result.video_id}` |",
-        f"| Taal | {result.language} ({result.language_code}) |",
+        f"| Language | {result.language} ({result.language_code}) |",
         f"| Auto-generated | {result.is_generated} |",
-        f"| Opgehaald op | {result.fetched_at.isoformat(timespec='seconds')} |",
-        f"| Aantal regels | {result.line_count} |",
-        f"| Aantal woorden | {result.word_count} |",
+        f"| Fetched at | {result.fetched_at.isoformat(timespec='seconds')} |",
+        f"| Lines | {result.line_count} |",
+        f"| Words | {result.word_count} |",
         "",
         "## Transcript",
         "",

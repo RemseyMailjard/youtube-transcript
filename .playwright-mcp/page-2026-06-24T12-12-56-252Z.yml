@@ -1,0 +1,154 @@
+- generic [ref=e2]:
+  - generic [ref=e11]:
+    - generic [ref=e16]:
+      - generic [ref=e17]: 🎬
+      - generic [ref=e18]: TranscriptBuddy
+    - paragraph [ref=e23]: Settings & preferences
+    - separator [ref=e28]
+    - paragraph [ref=e33]: Language preferences
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - button "English (en), close by backspace":
+          - generic "English (en)" [ref=e40]
+          - img [ref=e42] [cursor=pointer]
+        - button "Dutch (nl), close by backspace":
+          - generic "Dutch (nl)" [ref=e44]
+          - img [ref=e46] [cursor=pointer]
+        - combobox "Selected English (en), Dutch (nl). Preferred languages (order = priority)" [ref=e49]
+      - generic [ref=e50]:
+        - button "Clear all" [ref=e51] [cursor=pointer]
+        - img "open" [ref=e53] [cursor=pointer]
+    - paragraph [ref=e59]: ⚡ Availability depends on YouTube captions
+    - separator [ref=e64]
+    - paragraph [ref=e69]: Transcript cleaning
+    - generic [ref=e72] [cursor=pointer]:
+      - checkbox "Include timestamps"
+      - generic [ref=e76]:
+        - paragraph [ref=e78]: Include timestamps
+        - button "Help for Include timestamps" [ref=e82]:
+          - img [ref=e83]
+    - generic [ref=e88] [cursor=pointer]:
+      - checkbox "Merge lines into paragraphs"
+      - generic [ref=e92]:
+        - paragraph [ref=e94]: Merge lines into paragraphs
+        - button "Help for Merge lines into paragraphs" [ref=e98]:
+          - img [ref=e99]
+    - generic [ref=e104] [cursor=pointer]:
+      - checkbox "Remove extra spaces" [checked]
+      - generic [ref=e108]:
+        - paragraph [ref=e110]: Remove extra spaces
+        - button "Help for Remove extra spaces" [ref=e114]:
+          - img [ref=e115]
+    - generic [ref=e120] [cursor=pointer]:
+      - checkbox "Convert to lowercase"
+      - paragraph [ref=e126]: Convert to lowercase
+    - generic [ref=e129] [cursor=pointer]:
+      - checkbox "Remove filler words"
+      - generic [ref=e133]:
+        - paragraph [ref=e135]: Remove filler words
+        - button "Help for Remove filler words" [ref=e139]:
+          - img [ref=e140]
+    - separator [ref=e147]
+    - paragraph [ref=e152]: Export settings
+    - generic [ref=e155] [cursor=pointer]:
+      - checkbox "Auto-save to output/"
+      - generic [ref=e159]:
+        - paragraph [ref=e161]: Auto-save to output/
+        - button "Help for Auto-save to output/" [ref=e165]:
+          - img [ref=e166]
+    - separator [ref=e173]
+    - separator [ref=e178]
+    - paragraph [ref=e183]: About
+    - group [ref=e186]:
+      - generic "keyboard_arrow_right How it works" [ref=e187] [cursor=pointer]:
+        - generic [ref=e188]:
+          - generic [ref=e190]: keyboard_arrow_right
+          - paragraph [ref=e193]: How it works
+    - group [ref=e196]:
+      - generic "keyboard_arrow_right Known limitations" [ref=e197] [cursor=pointer]:
+        - generic [ref=e198]:
+          - generic [ref=e200]: keyboard_arrow_right
+          - paragraph [ref=e203]: Known limitations
+    - group [ref=e206]:
+      - generic "keyboard_arrow_right Theme tip" [ref=e207] [cursor=pointer]:
+        - generic [ref=e208]:
+          - generic [ref=e210]: keyboard_arrow_right
+          - paragraph [ref=e213]: Theme tip
+    - separator [ref=e218]
+    - paragraph [ref=e223]: TranscriptBuddy v1.0 · Powered by youtube-transcript-api
+  - generic [ref=e3]:
+    - banner [ref=e226]
+    - generic [ref=e227]:
+      - generic [ref=e232]:
+        - generic [ref=e233]: Free & Open Source
+        - heading "TranscriptBuddy" [level=1] [ref=e235]:
+          - text: TranscriptBuddy
+          - generic [ref=e236]:
+            - link "Link to heading":
+              - /url: "#transcript-buddy"
+              - img
+        - paragraph [ref=e237]: Turn YouTube videos into clean, usable transcripts
+        - generic [ref=e238]:
+          - generic [ref=e239]:
+            - generic [ref=e240]: 🌍
+            - text: 11 languages
+          - generic [ref=e241]:
+            - generic [ref=e242]: 📋
+            - text: One-click copy
+          - generic [ref=e243]:
+            - generic [ref=e244]: 📥
+            - text: TXT, MD, JSON export
+          - generic [ref=e245]:
+            - generic [ref=e246]: ⚡
+            - text: Instant results
+      - generic [ref=e250]:
+        - paragraph [ref=e251]: Enter a YouTube video
+        - paragraph [ref=e252]: Paste any YouTube URL or video ID below
+      - generic [ref=e254]:
+        - textbox "YouTube URL or Video ID" [ref=e261]:
+          - /placeholder: https://www.youtube.com/watch?v=... or paste a video ID
+          - text: https://www.youtube.com/watch?v=9-zxCfKKxyU
+        - button "Try example" [active] [ref=e266] [cursor=pointer]:
+          - paragraph [ref=e270]: Try example
+      - generic [ref=e272]:
+        - button "🎯 Get Transcript" [ref=e277] [cursor=pointer]:
+          - paragraph [ref=e281]: 🎯 Get Transcript
+        - button "🔄 Refetch (clear cache)" [ref=e286] [cursor=pointer]:
+          - paragraph [ref=e290]: 🔄 Refetch (clear cache)
+        - button "Reset" [ref=e295] [cursor=pointer]:
+          - paragraph [ref=e299]: Reset
+      - separator [ref=e304]
+      - paragraph [ref=e309]: How it works
+      - generic [ref=e314]:
+        - generic [ref=e315]:
+          - generic [ref=e316]: "1"
+          - heading "Paste a URL" [level=4] [ref=e318]:
+            - text: Paste a URL
+            - generic [ref=e319]:
+              - link "Link to heading":
+                - /url: "#paste-a-url"
+                - img
+          - paragraph [ref=e320]: Enter any YouTube video link or video ID. We support all standard URL formats including shorts and embeds.
+        - generic [ref=e321]:
+          - generic [ref=e322]: "2"
+          - heading "Get transcript" [level=4] [ref=e324]:
+            - text: Get transcript
+            - generic [ref=e325]:
+              - link "Link to heading":
+                - /url: "#get-transcript"
+                - img
+          - paragraph [ref=e326]: Click the button and we'll fetch the available captions. Choose your preferred language in the sidebar.
+        - generic [ref=e327]:
+          - generic [ref=e328]: "3"
+          - heading "Copy or download" [level=4] [ref=e330]:
+            - text: Copy or download
+            - generic [ref=e331]:
+              - link "Link to heading":
+                - /url: "#copy-or-download"
+                - img
+          - paragraph [ref=e332]: Copy the clean transcript to your clipboard, or download it as TXT, Markdown, or JSON.
+      - generic [ref=e337]:
+        - strong [ref=e338]: TranscriptBuddy
+        - text: · Turn YouTube videos into clean, usable transcripts
+        - text: Built with Streamlit & youtube-transcript-api · Free & open source
+        - text: Transcript availability depends on YouTube captions provided by video creators.
