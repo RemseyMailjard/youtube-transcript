@@ -44,13 +44,13 @@ html, body, [class*="css"] {
 
 /* Hero banner */
 .tb-hero {
-    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%) !important;
     padding: 2.5rem 2rem 2rem;
     text-align: center;
     margin: -1rem -1rem 2rem -1rem;
 }
 .tb-hero h1 {
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     font-size: 2.8rem;
     font-weight: 900;
     margin: 0 0 0.5rem 0;
@@ -113,12 +113,12 @@ html, body, [class*="css"] {
 }
 .tb-result-card h4 {
     margin: 0 0 0.3rem 0;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--tb-text);
 }
 .tb-result-card .meta {
-    font-size: 0.8rem;
+    font-size: 0.88rem;
     color: var(--tb-text-light);
 }
 .tb-result-card .meta span {
@@ -165,7 +165,7 @@ html, body, [class*="css"] {
     font-weight: 600;
 }
 .tb-stat .value {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--tb-text);
 }
@@ -175,20 +175,20 @@ html, body, [class*="css"] {
     background: #E8F5E9;
     border: 1px solid #C8E6C9;
     border-radius: var(--tb-radius-sm);
-    padding: 0.7rem 1rem;
+    padding: 0.8rem 1.1rem;
     color: #2E7D32;
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     margin-bottom: 1rem;
 }
 .tb-error {
     background: #FFEBEE;
     border: 1px solid #FFCDD2;
     border-radius: var(--tb-radius-sm);
-    padding: 0.7rem 1rem;
+    padding: 0.8rem 1.1rem;
     color: #C62828;
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     margin-bottom: 1rem;
 }
 
@@ -210,13 +210,13 @@ html, body, [class*="css"] {
 }
 .tb-video-item .info h4 {
     margin: 0 0 0.3rem 0;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--tb-text);
     line-height: 1.3;
 }
 .tb-video-item .info .meta {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     color: var(--tb-text-light);
 }
 

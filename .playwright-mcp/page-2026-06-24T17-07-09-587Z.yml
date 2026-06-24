@@ -1,0 +1,305 @@
+- generic [ref=e3]:
+  - banner [ref=e6]
+  - generic [ref=e7]:
+    - generic [ref=e12]:
+      - heading "YouTube to Transcript" [level=1] [ref=e14]:
+        - text: YouTube to Transcript
+        - generic [ref=e15]:
+          - link "Link to heading":
+            - /url: "#you-tube-to-transcript"
+            - img
+      - paragraph [ref=e16]:
+        - text: Generate YouTube Transcript for FREE.
+        - text: Access all Transcript Languages, Easy Copy and Edit!
+    - generic [ref=e18]:
+      - tablist [ref=e20]:
+        - tab "Transcript" [ref=e21] [cursor=pointer]:
+          - paragraph [ref=e23]: Transcript
+        - tab "Search" [ref=e24] [cursor=pointer]:
+          - paragraph [ref=e26]: Search
+        - tab "Channel" [ref=e27] [cursor=pointer]:
+          - paragraph [ref=e29]: Channel
+        - tab "Playlist" [ref=e30] [cursor=pointer]:
+          - paragraph [ref=e32]: Playlist
+        - tab "API Docs" [active] [selected] [ref=e33] [cursor=pointer]:
+          - paragraph [ref=e35]: API Docs
+      - tabpanel "API Docs" [ref=e82]:
+        - generic [ref=e83]:
+          - heading "REST API Documentation" [level=5] [ref=e89]:
+            - text: REST API Documentation
+            - generic [ref=e90]:
+              - link "Link to heading":
+                - /url: "#rest-api-documentation"
+                - img
+          - paragraph [ref=e95]:
+            - text: "Base URL:"
+            - code [ref=e96]: https://youtube-transcript-remsey.streamlit.app/api/v2
+          - code [ref=e101]: uv run uvicorn api:app --port 8000
+          - separator [ref=e106]
+          - heading "Endpoints" [level=5] [ref=e112]:
+            - text: Endpoints
+            - generic [ref=e113]:
+              - link "Link to heading":
+                - /url: "#endpoints"
+                - img
+          - table [ref=e118]:
+            - rowgroup [ref=e119]:
+              - row "Endpoint Description Method" [ref=e120]:
+                - columnheader "Endpoint" [ref=e121]
+                - columnheader "Description" [ref=e122]
+                - columnheader "Method" [ref=e123]
+            - rowgroup [ref=e124]:
+              - row "/api/v2/youtube/transcript Extract video transcript GET" [ref=e125]:
+                - cell "/api/v2/youtube/transcript" [ref=e126]:
+                  - code [ref=e127]: /api/v2/youtube/transcript
+                - cell "Extract video transcript" [ref=e128]
+                - cell "GET" [ref=e129]
+              - row "/api/v2/youtube/search Search videos or channels GET" [ref=e130]:
+                - cell "/api/v2/youtube/search" [ref=e131]:
+                  - code [ref=e132]: /api/v2/youtube/search
+                - cell "Search videos or channels" [ref=e133]
+                - cell "GET" [ref=e134]
+              - row "/api/v2/youtube/channel/resolve Resolve @handle to channel ID GET" [ref=e135]:
+                - cell "/api/v2/youtube/channel/resolve" [ref=e136]:
+                  - code [ref=e137]: /api/v2/youtube/channel/resolve
+                - cell "Resolve @handle to channel ID" [ref=e138]
+                - cell "GET" [ref=e139]
+              - row "/api/v2/youtube/channel/search Search within a channel GET" [ref=e140]:
+                - cell "/api/v2/youtube/channel/search" [ref=e141]:
+                  - code [ref=e142]: /api/v2/youtube/channel/search
+                - cell "Search within a channel" [ref=e143]
+                - cell "GET" [ref=e144]
+              - row "/api/v2/youtube/channel/videos List channel uploads GET" [ref=e145]:
+                - cell "/api/v2/youtube/channel/videos" [ref=e146]:
+                  - code [ref=e147]: /api/v2/youtube/channel/videos
+                - cell "List channel uploads" [ref=e148]
+                - cell "GET" [ref=e149]
+              - row "/api/v2/youtube/channel/latest Latest 15 videos (RSS) GET" [ref=e150]:
+                - cell "/api/v2/youtube/channel/latest" [ref=e151]:
+                  - code [ref=e152]: /api/v2/youtube/channel/latest
+                - cell "Latest 15 videos (RSS)" [ref=e153]
+                - cell "GET" [ref=e154]
+              - row "/api/v2/youtube/playlist/videos List playlist videos GET" [ref=e155]:
+                - cell "/api/v2/youtube/playlist/videos" [ref=e156]:
+                  - code [ref=e157]: /api/v2/youtube/playlist/videos
+                - cell "List playlist videos" [ref=e158]
+                - cell "GET" [ref=e159]
+          - separator [ref=e164]
+          - heading "Transcript" [level=5] [ref=e170]:
+            - text: Transcript
+            - generic [ref=e171]:
+              - link "Link to heading":
+                - /url: "#transcript"
+                - img
+          - code [ref=e176]: GET /api/v2/youtube/transcript
+          - table [ref=e181]:
+            - rowgroup [ref=e182]:
+              - row "Parameter Type Required Default Description" [ref=e183]:
+                - columnheader "Parameter" [ref=e184]
+                - columnheader "Type" [ref=e185]
+                - columnheader "Required" [ref=e186]
+                - columnheader "Default" [ref=e187]
+                - columnheader "Description" [ref=e188]
+            - rowgroup [ref=e189]:
+              - row "video_url string Yes — YouTube URL or video ID" [ref=e190]:
+                - cell "video_url" [ref=e191]:
+                  - code [ref=e192]: video_url
+                - cell "string" [ref=e193]
+                - cell "Yes" [ref=e194]
+                - cell "—" [ref=e195]
+                - cell "YouTube URL or video ID" [ref=e196]
+              - row "format string No json json or text" [ref=e197]:
+                - cell "format" [ref=e198]:
+                  - code [ref=e199]: format
+                - cell "string" [ref=e200]
+                - cell "No" [ref=e201]
+                - cell "json" [ref=e202]:
+                  - code [ref=e203]: json
+                - cell "json or text" [ref=e204]:
+                  - code [ref=e205]: json
+                  - text: or
+                  - code [ref=e206]: text
+              - row "include_timestamp bool No true Include timestamps" [ref=e207]:
+                - cell "include_timestamp" [ref=e208]:
+                  - code [ref=e209]: include_timestamp
+                - cell "bool" [ref=e210]
+                - cell "No" [ref=e211]
+                - cell "true" [ref=e212]:
+                  - code [ref=e213]: "true"
+                - cell "Include timestamps" [ref=e214]
+              - row "send_metadata bool No false Include video metadata" [ref=e215]:
+                - cell "send_metadata" [ref=e216]:
+                  - code [ref=e217]: send_metadata
+                - cell "bool" [ref=e218]
+                - cell "No" [ref=e219]
+                - cell "false" [ref=e220]:
+                  - code [ref=e221]: "false"
+                - cell "Include video metadata" [ref=e222]
+          - group [ref=e225]:
+            - generic "keyboard_arrow_right Example response" [ref=e226] [cursor=pointer]:
+              - generic [ref=e227]:
+                - generic [ref=e229]: keyboard_arrow_right
+                - paragraph [ref=e232]: Example response
+          - separator [ref=e237]
+          - heading "Search" [level=5] [ref=e243]:
+            - text: Search
+            - generic [ref=e244]:
+              - link "Link to heading":
+                - /url: "#search"
+                - img
+          - code [ref=e249]: GET /api/v2/youtube/search
+          - table [ref=e254]:
+            - rowgroup [ref=e255]:
+              - row "Parameter Type Required Default Description" [ref=e256]:
+                - columnheader "Parameter" [ref=e257]
+                - columnheader "Type" [ref=e258]
+                - columnheader "Required" [ref=e259]
+                - columnheader "Default" [ref=e260]
+                - columnheader "Description" [ref=e261]
+            - rowgroup [ref=e262]:
+              - row "q string Yes — Search query (1-200 chars)" [ref=e263]:
+                - cell "q" [ref=e264]:
+                  - code [ref=e265]: q
+                - cell "string" [ref=e266]
+                - cell "Yes" [ref=e267]
+                - cell "—" [ref=e268]
+                - cell "Search query (1-200 chars)" [ref=e269]
+              - row "type string No video video or channel" [ref=e270]:
+                - cell "type" [ref=e271]:
+                  - code [ref=e272]: type
+                - cell "string" [ref=e273]
+                - cell "No" [ref=e274]
+                - cell "video" [ref=e275]:
+                  - code [ref=e276]: video
+                - cell "video or channel" [ref=e277]:
+                  - code [ref=e278]: video
+                  - text: or
+                  - code [ref=e279]: channel
+          - separator [ref=e284]
+          - heading "Channel Endpoints" [level=5] [ref=e290]:
+            - text: Channel Endpoints
+            - generic [ref=e291]:
+              - link "Link to heading":
+                - /url: "#channel-endpoints"
+                - img
+          - generic [ref=e295]:
+            - paragraph [ref=e296]:
+              - strong [ref=e297]: Resolve
+              - text: —
+              - code [ref=e298]: GET /api/v2/youtube/channel/resolve?input=@TED
+            - paragraph [ref=e299]:
+              - strong [ref=e300]: Search
+              - text: —
+              - code [ref=e301]: GET /api/v2/youtube/channel/search?channel=@TED&q=innovation
+            - paragraph [ref=e302]:
+              - strong [ref=e303]: Videos
+              - text: —
+              - code [ref=e304]: GET /api/v2/youtube/channel/videos?channel=@TED
+            - paragraph [ref=e305]:
+              - strong [ref=e306]: Latest (RSS)
+              - text: —
+              - code [ref=e307]: GET /api/v2/youtube/channel/latest?channel=@TED
+            - paragraph [ref=e308]:
+              - text: All accept
+              - code [ref=e309]: "@handle"
+              - text: ", channel URL, or"
+              - code [ref=e310]: UC…
+              - text: ID.
+          - separator [ref=e315]
+          - heading "Playlist" [level=5] [ref=e321]:
+            - text: Playlist
+            - generic [ref=e322]:
+              - link "Link to heading":
+                - /url: "#playlist"
+                - img
+          - code [ref=e327]: GET /api/v2/youtube/playlist/videos?playlist=PLrAXtmErZgOe...
+          - paragraph [ref=e332]: Accepts playlist URL or ID (PL…, UU…, LL…).
+          - separator [ref=e337]
+          - heading "Code Examples" [level=5] [ref=e343]:
+            - text: Code Examples
+            - generic [ref=e344]:
+              - link "Link to heading":
+                - /url: "#code-examples"
+                - img
+          - generic [ref=e346]:
+            - tablist [ref=e348]:
+              - tab "Python" [selected] [ref=e349] [cursor=pointer]:
+                - paragraph [ref=e351]: Python
+              - tab "JavaScript" [ref=e352] [cursor=pointer]:
+                - paragraph [ref=e354]: JavaScript
+              - tab "cURL" [ref=e355] [cursor=pointer]:
+                - paragraph [ref=e357]: cURL
+            - tabpanel "Python" [ref=e360]:
+              - code [ref=e366]:
+                - text: import requests BASE = "https://youtube-transcript-remsey.streamlit.app/api/v2"
+                - text: "# Get transcript resp = requests.get(f\"{BASE}/youtube/transcript\", params={ \"video_url\": \"dQw4w9WgXcQ\", \"format\": \"json\", \"include_timestamp\": True,"
+                - text: "})"
+                - text: "for segment in resp.json()[\"transcript\"]: print(f\"[{segment['start']}s] {segment['text']}\")"
+                - text: "# Search resp = requests.get(f\"{BASE}/youtube/search\", params={\"q\": \"python\", \"type\": \"video\"})"
+                - text: "for v in resp.json()[\"results\"]: print(f\"{v['title']} ({v['videoId']})\")"
+          - separator [ref=e378]
+          - heading "Error Handling" [level=5] [ref=e384]:
+            - text: Error Handling
+            - generic [ref=e385]:
+              - link "Link to heading":
+                - /url: "#error-handling"
+                - img
+          - table [ref=e390]:
+            - rowgroup [ref=e391]:
+              - row "Status Code Description" [ref=e392]:
+                - columnheader "Status" [ref=e393]
+                - columnheader "Code" [ref=e394]
+                - columnheader "Description" [ref=e395]
+            - rowgroup [ref=e396]:
+              - row "200 — Success" [ref=e397]:
+                - cell "200" [ref=e398]:
+                  - code [ref=e399]: "200"
+                - cell "—" [ref=e400]
+                - cell "Success" [ref=e401]
+              - row "400 INVALID_INPUT Bad request" [ref=e402]:
+                - cell "400" [ref=e403]:
+                  - code [ref=e404]: "400"
+                - cell "INVALID_INPUT" [ref=e405]:
+                  - code [ref=e406]: INVALID_INPUT
+                - cell "Bad request" [ref=e407]
+              - row "404 VIDEO_NOT_FOUND Video not found" [ref=e408]:
+                - cell "404" [ref=e409]:
+                  - code [ref=e410]: "404"
+                - cell "VIDEO_NOT_FOUND" [ref=e411]:
+                  - code [ref=e412]: VIDEO_NOT_FOUND
+                - cell "Video not found" [ref=e413]
+              - row "404 NO_TRANSCRIPT No transcript available" [ref=e414]:
+                - cell "404" [ref=e415]:
+                  - code [ref=e416]: "404"
+                - cell "NO_TRANSCRIPT" [ref=e417]:
+                  - code [ref=e418]: NO_TRANSCRIPT
+                - cell "No transcript available" [ref=e419]
+              - row "408 REQUEST_BLOCKED Blocked by YouTube" [ref=e420]:
+                - cell "408" [ref=e421]:
+                  - code [ref=e422]: "408"
+                - cell "REQUEST_BLOCKED" [ref=e423]:
+                  - code [ref=e424]: REQUEST_BLOCKED
+                - cell "Blocked by YouTube" [ref=e425]
+              - row "422 INVALID_URL Invalid URL format" [ref=e426]:
+                - cell "422" [ref=e427]:
+                  - code [ref=e428]: "422"
+                - cell "INVALID_URL" [ref=e429]:
+                  - code [ref=e430]: INVALID_URL
+                - cell "Invalid URL format" [ref=e431]
+              - row "500 INTERNAL_ERROR Server error" [ref=e432]:
+                - cell "500" [ref=e433]:
+                  - code [ref=e434]: "500"
+                - cell "INTERNAL_ERROR" [ref=e435]:
+                  - code [ref=e436]: INTERNAL_ERROR
+                - cell "Server error" [ref=e437]
+          - status [ref=e440]:
+            - paragraph [ref=e444]:
+              - text: Interactive Swagger UI available at
+              - link "localhost:8000/docs" [ref=e445] [cursor=pointer]:
+                - /url: https://youtube-transcript-remsey.streamlit.app/docs
+              - text: when the API server is running.
+    - paragraph [ref=e80]:
+      - text: Built by
+      - link "Remsey Mailjard" [ref=e81] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/remseymailjard/
+      - text: · Powered by youtube-transcript-api & yt-dlp
