@@ -1,0 +1,91 @@
+- generic [ref=e3]:
+  - banner [ref=e6]
+  - generic [ref=e7]:
+    - generic [ref=e12]:
+      - heading "YouTube to Transcript" [level=1] [ref=e14]:
+        - text: YouTube to Transcript
+        - generic [ref=e15]:
+          - link "Link to heading":
+            - /url: "#you-tube-to-transcript"
+            - img
+      - paragraph [ref=e16]:
+        - text: Generate YouTube Transcript for FREE.
+        - text: Access all Transcript Languages, Easy Copy and Edit!
+    - generic [ref=e18]:
+      - tablist [ref=e20]:
+        - tab "Transcript" [active] [selected] [ref=e21] [cursor=pointer]:
+          - paragraph [ref=e23]: Transcript
+        - tab "Search" [ref=e24] [cursor=pointer]:
+          - paragraph [ref=e26]: Search
+        - tab "Channel" [ref=e27] [cursor=pointer]:
+          - paragraph [ref=e29]: Channel
+        - tab "Playlist" [ref=e30] [cursor=pointer]:
+          - paragraph [ref=e32]: Playlist
+      - tabpanel "Transcript" [ref=e35]:
+        - generic [ref=e36]:
+          - heading "Get Transcript" [level=5] [ref=e42]:
+            - text: Get Transcript
+            - generic [ref=e43]:
+              - link "Link to heading":
+                - /url: "#get-transcript"
+                - img
+          - generic [ref=e45]:
+            - textbox "YouTube URL" [ref=e52]:
+              - /placeholder: Paste YouTube URL here...
+              - text: dQw4w9WgXcQ
+            - button "Get Transcript" [ref=e57] [cursor=pointer]:
+              - paragraph [ref=e61]: Get Transcript
+          - group [ref=e64]:
+            - generic "keyboard_arrow_right Language & format options" [ref=e65] [cursor=pointer]:
+              - generic [ref=e66]:
+                - generic [ref=e68]: keyboard_arrow_right
+                - paragraph [ref=e71]: Language & format options
+          - generic [ref=e84]: Transcript fetched — English (EN)
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: Language
+              - generic [ref=e92]: English (EN)
+            - generic [ref=e93]:
+              - generic [ref=e94]: Type
+              - generic [ref=e95]: Manual
+            - generic [ref=e96]:
+              - generic [ref=e97]: Words
+              - generic [ref=e98]: "487"
+            - generic [ref=e99]:
+              - generic [ref=e100]: Lines
+              - generic [ref=e101]: "61"
+            - generic [ref=e102]:
+              - generic [ref=e103]: Reading
+              - generic [ref=e104]: 3 min
+          - iframe [ref=e106]:
+            - button "📋 Copy" [ref=f2e3] [cursor=pointer]:
+              - generic [ref=f2e4]: 📋
+              - generic [ref=f2e5]: Copy
+          - generic [ref=e111]: "[♪♪♪] ♪ We're no strangers to love ♪ ♪ You know the rules and so do I ♪ ♪ A full commitment's what I'm thinking of ♪ ♪ You wouldn't get this from any other guy ♪ ♪ I just wanna tell you how I'm feeling ♪ ♪ Gotta make you understand ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ We've known each other for so long ♪ ♪ Your heart's been aching but you're too shy to say it ♪ ♪ Inside we both know what's been going ♪ ♪ We know the game and we're gonna play it ♪ ♪ And if you ask me how I'm feeling ♪ ♪ Don't tell me you're too blind to see ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ (Ooh, give you up) ♪ ♪ (Ooh, give you up) ♪ ♪ Never gonna give, never gonna give ♪ ♪ (Give you up) ♪ ♪ Never gonna give, never gonna give ♪ ♪ (Give you up) ♪ ♪ We've known each other for so long ♪ ♪ Your heart's been aching but you're too shy to say it ♪ ♪ Inside we both know what's been going ♪ ♪ We know the game and we're gonna play it ♪ ♪ I just wanna tell you how I'm feeling ♪ ♪ Gotta make you understand ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪"
+          - generic [ref=e116]: Download
+          - generic [ref=e118]:
+            - button "Download .txt" [ref=e446] [cursor=pointer]:
+              - paragraph [ref=e450]: Download .txt
+            - button "Download .md" [ref=e453] [cursor=pointer]:
+              - paragraph [ref=e457]: Download .md
+            - button "Download .json" [ref=e460] [cursor=pointer]:
+              - paragraph [ref=e464]: Download .json
+          - group [ref=e148]:
+            - generic "keyboard_arrow_down Table view" [ref=e159] [cursor=pointer]:
+              - generic [ref=e150]:
+                - generic [ref=e161]: keyboard_arrow_down
+                - paragraph [ref=e155]: Table view
+            - generic [ref=e168]:
+              - button "Show/hide columns" [ref=e172] [cursor=pointer]:
+                - img [ref=e173]
+              - button "Download as CSV" [ref=e178] [cursor=pointer]:
+                - img [ref=e179]
+              - button "Search" [ref=e184] [cursor=pointer]:
+                - img [ref=e185]
+              - button "Fullscreen" [ref=e190] [cursor=pointer]:
+                - img [ref=e191]
+    - paragraph [ref=e77]:
+      - text: Built by
+      - link "Remsey Mailjard" [ref=e78] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/remseymailjard/
+      - text: · Powered by youtube-transcript-api & yt-dlp

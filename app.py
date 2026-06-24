@@ -65,16 +65,139 @@ inject_css()
 
 
 # ---------------------------------------------------------------------------
-# Session state
+# Session state defaults
 # ---------------------------------------------------------------------------
-if "active_tab" not in st.session_state:
-    st.session_state["active_tab"] = "Transcript"
+_DEFAULTS: dict[str, Any] = {
+    "transcript_result": None,
+    "transcript_error": None,
+    "search_results": None,
+    "search_error": None,
+    "channel_latest_data": None,
+    "channel_videos_data": None,
+    "channel_search_data": None,
+    "channel_resolve_data": None,
+    "channel_error": None,
+    "playlist_data": None,
+    "playlist_error": None,
+}
+for _k, _v in _DEFAULTS.items():
+    st.session_state.setdefault(_k, _v)
 
 
 # ---------------------------------------------------------------------------
 # Hero
 # ---------------------------------------------------------------------------
 render_hero()
+
+
+# ---------------------------------------------------------------------------
+# Callback functions
+# ---------------------------------------------------------------------------
+def _fetch_transcript() -> None:
+    st.session_state["transcript_result"] = None
+    st.session_state["transcript_error"] = None
+    url = st.session_state.get("transcript_url", "").strip()
+    if not url:
+        st.session_state["transcript_error"] = "Please enter a YouTube URL or video ID."
+        return
+    langs = st.session_state.get("lang_selection", DEFAULT_LANGUAGES)
+    try:
+        result = get_transcript(url, langs or DEFAULT_LANGUAGES)
+        st.session_state["transcript_result"] = result
+    except ValueError:
+        st.session_state["transcript_error"] = "Invalid YouTube URL or video ID."
+    except VideoUnavailable:
+        st.session_state["transcript_error"] = "Video unavailable — may be private or deleted."
+    except TranscriptsDisabled:
+        st.session_state["transcript_error"] = "Transcripts are disabled for this video."
+    except NoTranscriptFound:
+        st.session_state["transcript_error"] = f"No transcript found. Tried: {', '.join(langs or DEFAULT_LANGUAGES)}"
+    except _BLOCK_EXCS:  # type: ignore[misc]
+        st.session_state["transcript_error"] = "YouTube is blocking this request. Try later or run locally."
+    except CouldNotRetrieveTranscript as e:
+        st.session_state["transcript_error"] = f"Could not retrieve transcript: {e}"
+    except Exception as e:
+        st.session_state["transcript_error"] = f"{type(e).__name__}: {e}"
+
+
+def _do_search() -> None:
+    st.session_state["search_results"] = None
+    st.session_state["search_error"] = None
+    q = st.session_state.get("search_query", "").strip()
+    if not q:
+        st.session_state["search_error"] = "Please enter a search query."
+        return
+    stype = st.session_state.get("search_type", "video")
+    try:
+        st.session_state["search_results"] = search_youtube(q, search_type=stype)
+    except Exception as e:
+        st.session_state["search_error"] = f"Search failed: {e}"
+
+
+def _do_channel_latest() -> None:
+    st.session_state["channel_latest_data"] = None
+    st.session_state["channel_error"] = None
+    ch = st.session_state.get("channel_input", "").strip()
+    if not ch:
+        st.session_state["channel_error"] = "Enter a channel @handle, URL, or ID."
+        return
+    try:
+        st.session_state["channel_latest_data"] = get_channel_latest(ch)
+    except Exception as e:
+        st.session_state["channel_error"] = f"Failed: {e}"
+
+
+def _do_channel_videos() -> None:
+    st.session_state["channel_videos_data"] = None
+    st.session_state["channel_error"] = None
+    ch = st.session_state.get("channel_input", "").strip()
+    if not ch:
+        st.session_state["channel_error"] = "Enter a channel @handle, URL, or ID."
+        return
+    try:
+        st.session_state["channel_videos_data"] = get_channel_videos(ch)
+    except Exception as e:
+        st.session_state["channel_error"] = f"Failed: {e}"
+
+
+def _do_channel_search() -> None:
+    st.session_state["channel_search_data"] = None
+    st.session_state["channel_error"] = None
+    ch = st.session_state.get("channel_input", "").strip()
+    q = st.session_state.get("ch_search_q", "").strip()
+    if not ch or not q:
+        st.session_state["channel_error"] = "Enter both a channel and search query."
+        return
+    try:
+        st.session_state["channel_search_data"] = search_channel(ch, q)
+    except Exception as e:
+        st.session_state["channel_error"] = f"Failed: {e}"
+
+
+def _do_channel_resolve() -> None:
+    st.session_state["channel_resolve_data"] = None
+    st.session_state["channel_error"] = None
+    ch = st.session_state.get("channel_input", "").strip()
+    if not ch:
+        st.session_state["channel_error"] = "Enter a channel @handle, URL, or ID."
+        return
+    try:
+        st.session_state["channel_resolve_data"] = resolve_channel(ch)
+    except Exception as e:
+        st.session_state["channel_error"] = f"Failed: {e}"
+
+
+def _do_playlist() -> None:
+    st.session_state["playlist_data"] = None
+    st.session_state["playlist_error"] = None
+    pl = st.session_state.get("playlist_input", "").strip()
+    if not pl:
+        st.session_state["playlist_error"] = "Please enter a playlist URL or ID."
+        return
+    try:
+        st.session_state["playlist_data"] = get_playlist_videos(pl)
+    except Exception as e:
+        st.session_state["playlist_error"] = f"Failed: {e}"
 
 
 # ---------------------------------------------------------------------------
@@ -91,100 +214,87 @@ with tabs[0]:
 
     col_input, col_btn = st.columns([4, 1])
     with col_input:
-        video_url = st.text_input(
+        st.text_input(
             "YouTube URL",
             placeholder="Paste YouTube URL here...",
             label_visibility="collapsed",
             key="transcript_url",
         )
     with col_btn:
-        fetch_btn = st.button("Get Transcript", type="primary", use_container_width=True)
+        st.button(
+            "Get Transcript",
+            type="primary",
+            use_container_width=True,
+            on_click=_fetch_transcript,
+        )
 
-    # Language selector
     with st.expander("Language & format options"):
         lang_col, fmt_col = st.columns(2)
         with lang_col:
-            languages = st.multiselect(
+            st.multiselect(
                 "Preferred languages",
                 options=list(SUPPORTED_LANGUAGES.keys()),
                 default=DEFAULT_LANGUAGES,
                 format_func=lambda c: f"{SUPPORTED_LANGUAGES[c]} ({c})",
+                key="lang_selection",
             )
         with fmt_col:
-            include_ts = st.checkbox("Include timestamps", value=False)
-            merge_para = st.checkbox("Merge into paragraphs", value=False)
+            include_ts = st.checkbox("Include timestamps", value=False, key="include_ts")
+            merge_para = st.checkbox("Merge into paragraphs", value=False, key="merge_para")
 
-    if fetch_btn and video_url.strip():
-        try:
-            with st.spinner("Fetching transcript..."):
-                result = get_transcript(video_url.strip(), languages or DEFAULT_LANGUAGES)
+    # Show error
+    if st.session_state["transcript_error"]:
+        render_error(st.session_state["transcript_error"])
 
-            render_success(f"Transcript fetched — {result.language} ({result.language_code.upper()})")
-            render_transcript_stats(result)
+    # Show result
+    result: TranscriptResult | None = st.session_state["transcript_result"]
+    if result is not None:
+        render_success(f"Transcript fetched — {result.language} ({result.language_code.upper()})")
+        render_transcript_stats(result)
 
-            cleaned = clean_transcript(
-                result.snippets,
-                include_timestamps=include_ts,
-                merge_paragraphs=merge_para,
+        cleaned = clean_transcript(
+            result.snippets,
+            include_timestamps=include_ts,
+            merge_paragraphs=merge_para,
+        )
+
+        render_copy_button(cleaned, key="transcript")
+        render_transcript_block(cleaned)
+
+        st.markdown('<div class="tb-section">Download</div>', unsafe_allow_html=True)
+        d1, d2, d3 = st.columns(3)
+        with d1:
+            st.download_button(
+                "Download .txt",
+                data=to_txt(result, body=cleaned),
+                file_name=build_filename(result.video_id, result.fetched_at, "txt"),
+                mime="text/plain",
+                use_container_width=True,
+            )
+        with d2:
+            st.download_button(
+                "Download .md",
+                data=to_markdown(result, body=cleaned),
+                file_name=build_filename(result.video_id, result.fetched_at, "md"),
+                mime="text/markdown",
+                use_container_width=True,
+            )
+        with d3:
+            st.download_button(
+                "Download .json",
+                data=to_json(result),
+                file_name=build_filename(result.video_id, result.fetched_at, "json"),
+                mime="application/json",
+                use_container_width=True,
             )
 
-            render_copy_button(cleaned, key="transcript")
-            render_transcript_block(cleaned)
-
-            # Downloads
-            st.markdown('<div class="tb-section">Download</div>', unsafe_allow_html=True)
-            d1, d2, d3 = st.columns(3)
-            with d1:
-                st.download_button(
-                    "Download .txt",
-                    data=to_txt(result, body=cleaned),
-                    file_name=build_filename(result.video_id, result.fetched_at, "txt"),
-                    mime="text/plain",
-                    use_container_width=True,
-                )
-            with d2:
-                st.download_button(
-                    "Download .md",
-                    data=to_markdown(result, body=cleaned),
-                    file_name=build_filename(result.video_id, result.fetched_at, "md"),
-                    mime="text/markdown",
-                    use_container_width=True,
-                )
-            with d3:
-                st.download_button(
-                    "Download .json",
-                    data=to_json(result),
-                    file_name=build_filename(result.video_id, result.fetched_at, "json"),
-                    mime="application/json",
-                    use_container_width=True,
-                )
-
-            # Table view
-            with st.expander("Table view"):
-                df = pd.DataFrame({
-                    "Start": [fmt_hms(s.start) for s in result.snippets],
-                    "Duration": [round(s.duration, 2) for s in result.snippets],
-                    "Text": [s.text for s in result.snippets],
-                })
-                st.dataframe(df, use_container_width=True, hide_index=True)
-
-        except ValueError:
-            render_error("Invalid YouTube URL or video ID.", "Check your URL and try again.")
-        except VideoUnavailable:
-            render_error("Video unavailable.", "It may be private, deleted, or restricted.")
-        except TranscriptsDisabled:
-            render_error("Transcripts are disabled for this video.")
-        except NoTranscriptFound:
-            render_error("No transcript found.", f"Tried: {', '.join(languages or DEFAULT_LANGUAGES)}")
-        except _BLOCK_EXCS:  # type: ignore[misc]
-            render_error("YouTube is blocking this request.", "Try again later or run locally.")
-        except CouldNotRetrieveTranscript as e:
-            render_error(f"Could not retrieve transcript: {e}")
-        except Exception as e:
-            render_error(f"Something went wrong: {type(e).__name__}: {e}")
-
-    elif fetch_btn:
-        render_error("Please enter a YouTube URL or video ID.")
+        with st.expander("Table view"):
+            df = pd.DataFrame({
+                "Start": [fmt_hms(s.start) for s in result.snippets],
+                "Duration": [round(s.duration, 2) for s in result.snippets],
+                "Text": [s.text for s in result.snippets],
+            })
+            st.dataframe(df, use_container_width=True, hide_index=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -195,47 +305,43 @@ with tabs[1]:
 
     s_col1, s_col2, s_col3 = st.columns([3, 1, 1])
     with s_col1:
-        search_query = st.text_input(
+        st.text_input(
             "Search query",
             placeholder="Search YouTube...",
             label_visibility="collapsed",
             key="search_query",
         )
     with s_col2:
-        search_type = st.selectbox("Type", ["video", "channel"], label_visibility="collapsed")
+        st.selectbox("Type", ["video", "channel"], label_visibility="collapsed", key="search_type")
     with s_col3:
-        search_btn = st.button("Search", type="primary", use_container_width=True)
+        st.button("Search", type="primary", use_container_width=True, on_click=_do_search)
 
-    if search_btn and search_query.strip():
-        try:
-            with st.spinner("Searching..."):
-                data = search_youtube(search_query.strip(), search_type=search_type)
+    if st.session_state["search_error"]:
+        render_error(st.session_state["search_error"])
 
-            results = data.get("results", [])
-            st.caption(f"{len(results)} results found")
+    search_data = st.session_state["search_results"]
+    if search_data:
+        results = search_data.get("results", [])
+        st.caption(f"{len(results)} results found")
 
-            if search_type == "video":
-                render_video_list(results)
-            else:
-                for ch in results:
-                    st.markdown(
-                        f"""
-                        <div class="tb-result-card">
-                            <h4>{html.escape(ch.get('title', ''))}</h4>
-                            <div class="meta">
-                                <span>{html.escape(ch.get('handle', ''))}</span>
-                                <span>{html.escape(ch.get('subscriberCount', '') or '')}</span>
-                            </div>
-                            <div class="meta" style="margin-top:4px;">{html.escape((ch.get('description', '') or '')[:200])}</div>
+        stype = st.session_state.get("search_type", "video")
+        if stype == "video":
+            render_video_list(results)
+        else:
+            for ch in results:
+                st.markdown(
+                    f"""
+                    <div class="tb-result-card">
+                        <h4>{html.escape(ch.get('title', ''))}</h4>
+                        <div class="meta">
+                            <span>{html.escape(ch.get('handle', ''))}</span>
+                            <span>{html.escape(ch.get('subscriberCount', '') or '')}</span>
                         </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
-        except Exception as e:
-            render_error(f"Search failed: {e}")
-
-    elif search_btn:
-        render_error("Please enter a search query.")
+                        <div class="meta" style="margin-top:4px;">{html.escape((ch.get('description', '') or '')[:200])}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -244,7 +350,7 @@ with tabs[1]:
 with tabs[2]:
     st.markdown("##### Channel Explorer")
 
-    channel_input = st.text_input(
+    st.text_input(
         "Channel",
         placeholder="@handle, channel URL, or UC… ID",
         label_visibility="collapsed",
@@ -253,89 +359,71 @@ with tabs[2]:
 
     ch_sub = st.tabs(["Latest (RSS)", "All Videos", "Search in Channel", "Resolve ID"])
 
+    if st.session_state["channel_error"]:
+        render_error(st.session_state["channel_error"])
+
     # -- Latest (RSS) --
     with ch_sub[0]:
-        if st.button("Get Latest Videos", type="primary", key="ch_latest_btn"):
-            if channel_input.strip():
-                try:
-                    with st.spinner("Fetching RSS feed..."):
-                        data = get_channel_latest(channel_input.strip())
-                    ch_info = data.get("channel", {})
-                    render_success(f"Channel: {ch_info.get('title', '')} — {data.get('result_count', 0)} videos")
+        st.button("Get Latest Videos", type="primary", key="ch_latest_btn", on_click=_do_channel_latest)
 
-                    for v in data.get("results", []):
-                        vid = v.get("videoId", "")
-                        views = f"{int(v.get('viewCount', 0)):,} views" if v.get("viewCount") else ""
-                        st.markdown(
-                            f"""
-                            <div class="tb-video-item">
-                                <img src="{html.escape(v.get('thumbnail', {}).get('url', ''))}" alt="">
-                                <div class="info">
-                                    <h4>{html.escape(v.get('title', ''))}</h4>
-                                    <div class="meta"><span>{html.escape(v.get('published', '')[:10])}</span> · <span>{html.escape(views)}</span></div>
-                                </div>
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
-                except Exception as e:
-                    render_error(f"Failed: {e}")
-            else:
-                render_error("Enter a channel @handle, URL, or ID above.")
+        data = st.session_state["channel_latest_data"]
+        if data:
+            ch_info = data.get("channel", {})
+            render_success(f"Channel: {ch_info.get('title', '')} — {data.get('result_count', 0)} videos")
+            for v in data.get("results", []):
+                vid = v.get("videoId", "")
+                views = f"{int(v.get('viewCount', 0)):,} views" if v.get("viewCount") else ""
+                st.markdown(
+                    f"""
+                    <div class="tb-video-item">
+                        <img src="{html.escape(v.get('thumbnail', {}).get('url', ''))}" alt="">
+                        <div class="info">
+                            <h4>{html.escape(v.get('title', ''))}</h4>
+                            <div class="meta"><span>{html.escape(v.get('published', '')[:10])}</span> · <span>{html.escape(views)}</span></div>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
     # -- All Videos --
     with ch_sub[1]:
-        if st.button("Get All Videos", type="primary", key="ch_videos_btn"):
-            if channel_input.strip():
-                try:
-                    with st.spinner("Fetching channel videos..."):
-                        data = get_channel_videos(channel_input.strip())
-                    results = data.get("results", [])
-                    info = data.get("playlist_info", {})
-                    render_success(f"{info.get('ownerName', '')} — {info.get('numVideos', len(results))} videos")
-                    render_video_list(results[:100])
-                    if len(results) > 100:
-                        st.caption(f"Showing first 100 of {len(results)} videos")
-                except Exception as e:
-                    render_error(f"Failed: {e}")
-            else:
-                render_error("Enter a channel @handle, URL, or ID above.")
+        st.button("Get All Videos", type="primary", key="ch_videos_btn", on_click=_do_channel_videos)
+
+        data = st.session_state["channel_videos_data"]
+        if data:
+            results = data.get("results", [])
+            info = data.get("playlist_info", {})
+            render_success(f"{info.get('ownerName', '')} — {info.get('numVideos', len(results))} videos")
+            render_video_list(results[:100])
+            if len(results) > 100:
+                st.caption(f"Showing first 100 of {len(results)} videos")
 
     # -- Search in Channel --
     with ch_sub[2]:
-        ch_search_q = st.text_input(
+        st.text_input(
             "Search within channel",
             placeholder="Search query...",
             label_visibility="collapsed",
             key="ch_search_q",
         )
-        if st.button("Search Channel", type="primary", key="ch_search_btn"):
-            if channel_input.strip() and ch_search_q.strip():
-                try:
-                    with st.spinner("Searching channel..."):
-                        data = search_channel(channel_input.strip(), ch_search_q.strip())
-                    results = data.get("results", [])
-                    st.caption(f"{len(results)} results found")
-                    render_video_list(results)
-                except Exception as e:
-                    render_error(f"Failed: {e}")
-            else:
-                render_error("Enter both a channel and search query.")
+        st.button("Search Channel", type="primary", key="ch_search_btn", on_click=_do_channel_search)
+
+        data = st.session_state["channel_search_data"]
+        if data:
+            results = data.get("results", [])
+            st.caption(f"{len(results)} results found")
+            render_video_list(results)
 
     # -- Resolve ID --
     with ch_sub[3]:
-        if st.button("Resolve Channel ID", type="primary", key="ch_resolve_btn"):
-            if channel_input.strip():
-                try:
-                    with st.spinner("Resolving..."):
-                        data = resolve_channel(channel_input.strip())
-                    render_success(f"Channel ID: {data['channel_id']}")
-                    st.code(data["channel_id"], language=None)
-                    st.caption(f"Resolved from: {data['resolved_from']}")
-                except Exception as e:
-                    render_error(f"Failed: {e}")
-            else:
-                render_error("Enter a channel @handle, URL, or ID above.")
+        st.button("Resolve Channel ID", type="primary", key="ch_resolve_btn", on_click=_do_channel_resolve)
+
+        data = st.session_state["channel_resolve_data"]
+        if data:
+            render_success(f"Channel ID: {data['channel_id']}")
+            st.code(data["channel_id"], language=None)
+            st.caption(f"Resolved from: {data['resolved_from']}")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -346,27 +434,24 @@ with tabs[3]:
 
     pl_col1, pl_col2 = st.columns([4, 1])
     with pl_col1:
-        playlist_input = st.text_input(
+        st.text_input(
             "Playlist",
             placeholder="Playlist URL or ID (PL…, UU…, LL…)",
             label_visibility="collapsed",
             key="playlist_input",
         )
     with pl_col2:
-        pl_btn = st.button("Get Videos", type="primary", use_container_width=True, key="pl_btn")
+        st.button("Get Videos", type="primary", use_container_width=True, key="pl_btn", on_click=_do_playlist)
 
-    if pl_btn and playlist_input.strip():
-        try:
-            with st.spinner("Fetching playlist..."):
-                data = get_playlist_videos(playlist_input.strip())
-            results = data.get("results", [])
-            info = data.get("playlist_info", {})
-            render_success(f"{info.get('title', 'Playlist')} — {info.get('numVideos', len(results))} videos")
-            render_video_list(results)
-        except Exception as e:
-            render_error(f"Failed: {e}")
-    elif pl_btn:
-        render_error("Please enter a playlist URL or ID.")
+    if st.session_state["playlist_error"]:
+        render_error(st.session_state["playlist_error"])
+
+    pl_data = st.session_state["playlist_data"]
+    if pl_data:
+        results = pl_data.get("results", [])
+        info = pl_data.get("playlist_info", {})
+        render_success(f"{info.get('title', 'Playlist')} — {info.get('numVideos', len(results))} videos")
+        render_video_list(results)
 
 
 # ---------------------------------------------------------------------------
