@@ -234,6 +234,9 @@ def render_footer() -> None:
             <strong>TranscriptBuddy</strong> · Turn YouTube videos into clean, usable transcripts<br>
             Built with Streamlit &amp; youtube-transcript-api · Free &amp; open source<br>
             Transcript availability depends on YouTube captions provided by video creators.
+            <div style="margin-top:.8rem;padding-top:.6rem;border-top:1px solid #f1f5f9;">
+                Made by <a href="https://www.linkedin.com/in/remseymailjard/" target="_blank" rel="noopener">Remsey Mailjard</a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
