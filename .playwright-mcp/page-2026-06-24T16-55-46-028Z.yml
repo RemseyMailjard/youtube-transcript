@@ -1,0 +1,317 @@
+- generic [ref=e3]:
+  - banner [ref=e6]
+  - generic [ref=e7]:
+    - generic [ref=e12]:
+      - heading "YouTube to Transcript" [level=1] [ref=e14]:
+        - text: YouTube to Transcript
+        - generic [ref=e15]:
+          - link "Link to heading":
+            - /url: "#you-tube-to-transcript"
+            - img
+      - paragraph [ref=e16]:
+        - text: Generate YouTube Transcript for FREE.
+        - text: Access all Transcript Languages, Easy Copy and Edit!
+    - generic [ref=e18]:
+      - tablist [ref=e20]:
+        - tab "Transcript" [ref=e21] [cursor=pointer]:
+          - paragraph [ref=e23]: Transcript
+        - tab "Search" [selected] [ref=e24] [cursor=pointer]:
+          - paragraph [ref=e26]: Search
+        - tab "Channel" [ref=e27] [cursor=pointer]:
+          - paragraph [ref=e29]: Channel
+        - tab "Playlist" [ref=e30] [cursor=pointer]:
+          - paragraph [ref=e32]: Playlist
+      - tabpanel "Search" [ref=e79]:
+        - generic [ref=e80]:
+          - heading "Search YouTube" [level=5] [ref=e86]:
+            - text: Search YouTube
+            - link "Link to heading" [ref=e1594] [cursor=pointer]:
+              - /url: "#search-you-tube"
+              - img [ref=e1595]
+          - generic [ref=e89]:
+            - textbox "Search query" [ref=e96]:
+              - /placeholder: Search YouTube...
+              - text: rick astley
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]: video
+                - combobox "Selected video. Type" [ref=e106]
+              - img "open" [ref=e108]
+            - button "Search" [ref=e114] [cursor=pointer]:
+              - paragraph [ref=e118]: Search
+          - generic [ref=e1597]: Transcript — dQw4w9WgXcQ — English (EN)
+          - generic [ref=e1602]:
+            - generic [ref=e1603]:
+              - generic [ref=e1604]: Language
+              - generic [ref=e1605]: English (EN)
+            - generic [ref=e1606]:
+              - generic [ref=e1607]: Type
+              - generic [ref=e1608]: Manual
+            - generic [ref=e1609]:
+              - generic [ref=e1610]: Words
+              - generic [ref=e1611]: "487"
+            - generic [ref=e1612]:
+              - generic [ref=e1613]: Lines
+              - generic [ref=e1614]: "61"
+            - generic [ref=e1615]:
+              - generic [ref=e1616]: Reading
+              - generic [ref=e1617]: 3 min
+          - iframe [ref=e1618]:
+            - button "📋 Copy" [ref=f8e3] [cursor=pointer]:
+              - generic [ref=f8e4]: 📋
+              - generic [ref=f8e5]: Copy
+          - generic [ref=e1623]: "[♪♪♪] ♪ We're no strangers to love ♪ ♪ You know the rules and so do I ♪ ♪ A full commitment's what I'm thinking of ♪ ♪ You wouldn't get this from any other guy ♪ ♪ I just wanna tell you how I'm feeling ♪ ♪ Gotta make you understand ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ We've known each other for so long ♪ ♪ Your heart's been aching but you're too shy to say it ♪ ♪ Inside we both know what's been going ♪ ♪ We know the game and we're gonna play it ♪ ♪ And if you ask me how I'm feeling ♪ ♪ Don't tell me you're too blind to see ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ (Ooh, give you up) ♪ ♪ (Ooh, give you up) ♪ ♪ Never gonna give, never gonna give ♪ ♪ (Give you up) ♪ ♪ Never gonna give, never gonna give ♪ ♪ (Give you up) ♪ ♪ We've known each other for so long ♪ ♪ Your heart's been aching but you're too shy to say it ♪ ♪ Inside we both know what's been going ♪ ♪ We know the game and we're gonna play it ♪ ♪ I just wanna tell you how I'm feeling ♪ ♪ Gotta make you understand ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪ ♪ Never gonna give you up ♪ ♪ Never gonna let you down ♪ ♪ Never gonna run around and desert you ♪ ♪ Never gonna make you cry ♪ ♪ Never gonna say goodbye ♪ ♪ Never gonna tell a lie and hurt you ♪"
+          - generic [ref=e1625]:
+            - button "Download .txt" [ref=e1630] [cursor=pointer]:
+              - paragraph [ref=e1634]: Download .txt
+            - button "Download .md" [ref=e1639] [cursor=pointer]:
+              - paragraph [ref=e1643]: Download .md
+            - button "Download .json" [ref=e1648] [cursor=pointer]:
+              - paragraph [ref=e1652]: Download .json
+          - separator [ref=e1657]
+          - paragraph [ref=e1658]: 20 results found
+          - generic [ref=e261]:
+            - generic [ref=e266]:
+              - button "Fullscreen" [ref=e271] [cursor=pointer]:
+                - img [ref=e272]
+              - img "0" [ref=e277]
+            - generic [ref=e279]:
+              - paragraph [ref=e284]:
+                - strong [ref=e285]: Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)
+              - paragraph [ref=e290]: Rick Astley · 3:34 · 1786.0M views
+            - button "Get Transcript" [ref=e1661] [cursor=pointer]:
+              - paragraph [ref=e1665]: Get Transcript
+          - separator [ref=e304]
+          - generic [ref=e306]:
+            - generic [ref=e311]:
+              - button "Fullscreen" [ref=e316] [cursor=pointer]:
+                - img [ref=e317]
+              - img "0" [ref=e322]
+            - generic [ref=e324]:
+              - paragraph [ref=e329]:
+                - strong [ref=e330]: Rick Astley
+              - paragraph [ref=e335]: Rick Astley
+            - button "Get Transcript" [ref=e1668] [cursor=pointer]:
+              - paragraph [ref=e1672]: Get Transcript
+          - separator [ref=e349]
+          - generic [ref=e351]:
+            - generic [ref=e356]:
+              - button "Fullscreen" [ref=e361] [cursor=pointer]:
+                - img [ref=e362]
+              - img "0" [ref=e367]
+            - generic [ref=e369]:
+              - paragraph [ref=e374]:
+                - strong [ref=e375]: Rick Astley - Together Forever (Official Video) [4K Remaster]
+              - paragraph [ref=e380]: Rick Astley · 3:24 · 202.6M views
+            - button "Get Transcript" [ref=e1675] [cursor=pointer]:
+              - paragraph [ref=e1679]: Get Transcript
+          - separator [ref=e394]
+          - generic [ref=e396]:
+            - generic [ref=e401]:
+              - button "Fullscreen" [ref=e406] [cursor=pointer]:
+                - img [ref=e407]
+              - img "0" [ref=e412]
+            - generic [ref=e414]:
+              - paragraph [ref=e419]:
+                - strong [ref=e420]: Rick Astley - She Wants To Dance With Me (Official Video) (4K Remaster)
+              - paragraph [ref=e425]: Rick Astley · 4:20 · 25.7M views
+            - button "Get Transcript" [ref=e1682] [cursor=pointer]:
+              - paragraph [ref=e1686]: Get Transcript
+          - separator [ref=e439]
+          - generic [ref=e441]:
+            - generic [ref=e446]:
+              - button "Fullscreen" [ref=e451] [cursor=pointer]:
+                - img [ref=e452]
+              - img "0" [ref=e457]
+            - generic [ref=e459]:
+              - paragraph [ref=e464]:
+                - strong [ref=e465]: Rick Astley - Never Gonna Give You Up (Karaoke Version)
+              - paragraph [ref=e470]: Sing King · 4:13 · 5.3M views
+            - button "Get Transcript" [ref=e1689] [cursor=pointer]:
+              - paragraph [ref=e1693]: Get Transcript
+          - separator [ref=e484]
+          - generic [ref=e486]:
+            - generic [ref=e491]:
+              - button "Fullscreen" [ref=e496] [cursor=pointer]:
+                - img [ref=e497]
+              - img "0" [ref=e502]
+            - generic [ref=e504]:
+              - paragraph [ref=e509]:
+                - strong [ref=e510]: Rick Astley - Uptown Funk - RTL LATE NIGHT
+              - paragraph [ref=e515]: RTL Tonight · 5:14 · 2.1M views
+            - button "Get Transcript" [ref=e1696] [cursor=pointer]:
+              - paragraph [ref=e1700]: Get Transcript
+          - separator [ref=e529]
+          - generic [ref=e531]:
+            - generic [ref=e536]:
+              - button "Fullscreen" [ref=e541] [cursor=pointer]:
+                - img [ref=e542]
+              - img "0" [ref=e547]
+            - generic [ref=e549]:
+              - paragraph [ref=e554]:
+                - strong [ref=e555]: Rick Astley - Take Me To Your Heart (12 Inch Mix) (Clean)
+              - paragraph [ref=e560]: DJ Chronicles · 6:57 · 4.2M views
+            - button "Get Transcript" [ref=e1703] [cursor=pointer]:
+              - paragraph [ref=e1707]: Get Transcript
+          - separator [ref=e574]
+          - generic [ref=e576]:
+            - generic [ref=e581]:
+              - button "Fullscreen" [ref=e586] [cursor=pointer]:
+                - img [ref=e587]
+              - img "0" [ref=e592]
+            - generic [ref=e594]:
+              - paragraph [ref=e599]:
+                - strong [ref=e600]: Rick Astley - Cry for Help (Official Video) (4K Remaster)
+              - paragraph [ref=e605]: Rick Astley · 4:52 · 45.3M views
+            - button "Get Transcript" [ref=e1710] [cursor=pointer]:
+              - paragraph [ref=e1714]: Get Transcript
+          - separator [ref=e619]
+          - generic [ref=e621]:
+            - generic [ref=e626]:
+              - button "Fullscreen" [ref=e631] [cursor=pointer]:
+                - img [ref=e632]
+              - img "0" [ref=e637]
+            - generic [ref=e639]:
+              - paragraph [ref=e644]:
+                - strong [ref=e645]: Rick Astley with Blossoms - There Is A Light That Never Goes Out (Glastonbury 2023)
+              - paragraph [ref=e650]: BBC Music · 4:32 · 4.3M views
+            - button "Get Transcript" [ref=e1717] [cursor=pointer]:
+              - paragraph [ref=e1721]: Get Transcript
+          - separator [ref=e664]
+          - generic [ref=e666]:
+            - generic [ref=e671]:
+              - button "Fullscreen" [ref=e676] [cursor=pointer]:
+                - img [ref=e677]
+              - img "0" [ref=e682]
+            - generic [ref=e684]:
+              - paragraph [ref=e689]:
+                - strong [ref=e690]: Rick Astley - Together Forever (Official HD Video)
+              - paragraph [ref=e695]: Rick Astley · 3:24 · 27.4M views
+            - button "Get Transcript" [ref=e1724] [cursor=pointer]:
+              - paragraph [ref=e1728]: Get Transcript
+          - separator [ref=e709]
+          - generic [ref=e711]:
+            - generic [ref=e716]:
+              - button "Fullscreen" [ref=e721] [cursor=pointer]:
+                - img [ref=e722]
+              - img "0" [ref=e727]
+            - generic [ref=e729]:
+              - paragraph [ref=e734]:
+                - strong [ref=e735]: Rick Astley - Everlong (Foo Fighters Cover) (Radio 2 in the Park 2023)
+              - paragraph [ref=e740]: BBC Music · 5:36 · 1.2M views
+            - button "Get Transcript" [ref=e1731] [cursor=pointer]:
+              - paragraph [ref=e1735]: Get Transcript
+          - separator [ref=e754]
+          - generic [ref=e756]:
+            - generic [ref=e761]:
+              - button "Fullscreen" [ref=e766] [cursor=pointer]:
+                - img [ref=e767]
+              - img "0" [ref=e772]
+            - generic [ref=e774]:
+              - paragraph [ref=e779]:
+                - strong [ref=e780]: What led Rick Astley to quitting pop music at 27
+              - paragraph [ref=e785]: Q with Tom Power · 37:16 · 18.5K views
+            - button "Get Transcript" [ref=e1738] [cursor=pointer]:
+              - paragraph [ref=e1742]: Get Transcript
+          - separator [ref=e799]
+          - generic [ref=e801]:
+            - generic [ref=e806]:
+              - button "Fullscreen" [ref=e811] [cursor=pointer]:
+                - img [ref=e812]
+              - img "0" [ref=e817]
+            - generic [ref=e819]:
+              - paragraph [ref=e824]:
+                - strong [ref=e825]: Rick Astley - Never Gonna Give You Up [HQ]
+              - paragraph [ref=e830]: AllKindsOfStuff · 3:33 · 10.0M views
+            - button "Get Transcript" [ref=e1745] [cursor=pointer]:
+              - paragraph [ref=e1749]: Get Transcript
+          - separator [ref=e844]
+          - generic [ref=e846]:
+            - generic [ref=e851]:
+              - button "Fullscreen" [ref=e856] [cursor=pointer]:
+                - img [ref=e857]
+              - img "0" [ref=e862]
+            - generic [ref=e864]:
+              - paragraph [ref=e869]:
+                - strong [ref=e870]: Rick Astley - Whenever You Need Somebody (Official Video) (4K Remaster)
+              - paragraph [ref=e875]: Rick Astley · 3:28 · 20.3M views
+            - button "Get Transcript" [ref=e1752] [cursor=pointer]:
+              - paragraph [ref=e1756]: Get Transcript
+          - separator [ref=e889]
+          - generic [ref=e891]:
+            - generic [ref=e896]:
+              - button "Fullscreen" [ref=e901] [cursor=pointer]:
+                - img [ref=e902]
+              - img "0" [ref=e907]
+            - generic [ref=e909]:
+              - paragraph [ref=e914]:
+                - strong [ref=e915]: Rick Astley - Never Gonna Give You Up | Glastonbury 2023
+              - paragraph [ref=e920]: BBC Music · 9:20 · 6.1M views
+            - button "Get Transcript" [ref=e1759] [cursor=pointer]:
+              - paragraph [ref=e1763]: Get Transcript
+          - separator [ref=e934]
+          - generic [ref=e936]:
+            - generic [ref=e941]:
+              - button "Fullscreen" [ref=e946] [cursor=pointer]:
+                - img [ref=e947]
+              - img "0" [ref=e952]
+            - generic [ref=e954]:
+              - paragraph [ref=e959]:
+                - strong [ref=e960]: Rick Astley - Angels On My Side (Official Video) [4K Remaster]
+              - paragraph [ref=e965]: Rick Astley · 3:26 · 10.7M views
+            - button "Get Transcript" [ref=e1766] [cursor=pointer]:
+              - paragraph [ref=e1770]: Get Transcript
+          - separator [ref=e979]
+          - generic [ref=e981]:
+            - generic [ref=e986]:
+              - button "Fullscreen" [ref=e991] [cursor=pointer]:
+                - img [ref=e992]
+              - img "0" [ref=e997]
+            - generic [ref=e999]:
+              - paragraph [ref=e1004]:
+                - strong [ref=e1005]: Rick Astley Rocks New Year’s Eve 2024
+              - paragraph [ref=e1010]: asshodique · 1:12:15 · 217.2K views
+            - button "Get Transcript" [ref=e1773] [cursor=pointer]:
+              - paragraph [ref=e1777]: Get Transcript
+          - separator [ref=e1024]
+          - generic [ref=e1779]:
+            - generic [ref=e1784]:
+              - button "Fullscreen" [ref=e1789] [cursor=pointer]:
+                - img [ref=e1790]
+              - img "0" [ref=e1795]
+            - generic [ref=e1797]:
+              - paragraph [ref=e1802]:
+                - strong [ref=e1803]: Rick Astley - Hold Me In Your Arms (Official Video) [4K Remaster]
+              - paragraph [ref=e1808]: Rick Astley · 4:24 · 18.1M views
+            - button "Get Transcript" [ref=e1813] [cursor=pointer]:
+              - paragraph [ref=e1817]: Get Transcript
+          - separator [ref=e1822]
+          - generic [ref=e1824]:
+            - generic [ref=e1829]:
+              - button "Fullscreen" [ref=e1834] [cursor=pointer]:
+                - img [ref=e1835]
+              - img "0" [ref=e1840]
+            - generic [ref=e1842]:
+              - paragraph [ref=e1847]:
+                - strong [ref=e1848]: Rick Astley - Keep Singing (Live at The O2, London, April 2026)
+              - paragraph [ref=e1853]: Rick Astley · 4:08 · 7.8K views
+            - button "Get Transcript" [ref=e1858] [cursor=pointer]:
+              - paragraph [ref=e1862]: Get Transcript
+          - separator [ref=e1867]
+          - generic [ref=e1869]:
+            - generic [ref=e1874]:
+              - button "Fullscreen" [ref=e1879] [cursor=pointer]:
+                - img [ref=e1880]
+              - img "0" [ref=e1885]
+            - generic [ref=e1887]:
+              - paragraph [ref=e1892]:
+                - strong [ref=e1893]: 【日本語字幕】Rick Astley - Whenever You Need Somebody
+              - paragraph [ref=e1898]: Rick Astley · 3:28 · 155.0K views
+            - button "Get Transcript" [ref=e1903] [cursor=pointer]:
+              - paragraph [ref=e1907]: Get Transcript
+          - separator [ref=e1912]
+    - paragraph [ref=e77]:
+      - text: Built by
+      - link "Remsey Mailjard" [ref=e78] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/remseymailjard/
+      - text: · Powered by youtube-transcript-api & yt-dlp

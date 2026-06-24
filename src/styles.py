@@ -37,7 +37,10 @@ html, body, [class*="css"] {
     max-width: 900px;
 }
 
-[data-testid="stSidebar"] { display: none !important; }
+[data-testid="stSidebar"] {
+    background: #FAFAFA;
+    border-right: 1px solid var(--tb-border);
+}
 
 /* Hero banner */
 .tb-hero {
